@@ -17,7 +17,7 @@ This repository contains the backend codes for various chapters of Shigley's Mec
 Shigley's Mechanical Engineering Design is a cornerstone resource for mechanical engineering students and professionals, providing comprehensive coverage of mechanical engineering design principles and techniques. This repository aims to complement the textbook by offering backend implementations and GUIs for certain chapters, enhancing the learning and understanding of the concepts presented in the book.
 
 ## Features
-- **Backend Codes**: Backend codes are provided for several chapters of Shigley's Mechanical Engineering Design 10th Edition.
+- **Backend Codes**: Backend codes are provided for Chapters 5 (Failures Resulting from Static Loading), 6 (Fatigue Failure Resulting from Variable Loading), 7 (Shafts and Shaft Components), 11 (Rolling-Contact Bearings) of Shigley's Mechanical Engineering Design 10th Edition.
 - **Graphical User Interface (GUI)**: GUI implementations are available for selected chapters, offering an interactive learning environment.
 - **Modular Structure**: The repository is organized into separate directories for each chapter, ensuring modularity and ease of navigation.
 - **Easy Integration**: Codes can be easily integrated into existing projects or used for educational purposes.
