@@ -36,4 +36,4 @@ To get started with using the backend codes and GUIs, follow these steps:
 Contributions to this repository are welcome! If you have improvements, additional backend codes, or GUI implementations for other chapters, feel free to submit a pull request. Please ensure your contributions adhere to the repository's coding standards and include appropriate documentation.
 
 ## License
-You are free to use, modify, and distribute the code for both commercial and non-commercial purposes. However, please attribute the original work to Shigley's Mechanical Engineering Design 10th Edition and provide appropriate acknowledgments.
+You are free to use, modify, and distribute the code for both educational purposes. However, please attribute the original work to Shigley's Mechanical Engineering Design 10th Edition and provide appropriate acknowledgments.
