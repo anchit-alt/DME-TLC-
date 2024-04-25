@@ -24,10 +24,8 @@ Modular Structure: The repository is organized into separate directories for eac
 Easy Integration: Codes can be easily integrated into existing projects or used for educational purposes.
 Installation
 To get started with using the backend codes and GUIs, follow these steps:
-1. Clone the Repository: Clone this repository to your local machine using
-git clone https://github.com/yourusername/shigleys-mechanical-design-backend.git
-2. Install Dependencies: Navigate to the cloned directory and install any necessary dependencies using:
-pip install -r requirements.txt
+1. Clone the Repository: Clone this repository to your local machine using git clone https://github.com/smrithilokesh/DME-TLC-.git
+2. Install Dependencies: Navigate to the cloned directory and install any necessary dependencies using pip install -r requirements.txt
 3. Explore the Chapters: Explore the directories corresponding to the chapters you are interested in.
 
 Usage
