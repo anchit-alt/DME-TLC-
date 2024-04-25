@@ -1,6 +1,4 @@
 # DME-TLC-
-Design of Machine Elements 
-
 
 Shigley's Mechanical Engineering Design 10th Edition Backend Repository
 
