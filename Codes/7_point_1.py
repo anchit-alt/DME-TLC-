@@ -5,7 +5,7 @@ import math
 from sympy import *
 from sympy import symbols, solve
 from PIL import Image
-Sut = float(input("Enter Sut(MPa): "))
+Sut = float(input("Enter Sut (MPa): "))
 Sy = float(input("Enter Sy (MPa): "))
 
 q =None
