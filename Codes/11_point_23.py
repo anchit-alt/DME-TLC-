@@ -18,8 +18,13 @@ ld = None
 nd = None
 LD = None
 XD = None
-
-
+C_o = None
+e1 = None
+e2 = None
+X2 = None
+Y2 = None
+Fa_by_Co = None
+Fa_by_VFr = None
 def calculate_LD(ld, nd):
     return 60 * ld * nd
 
@@ -31,7 +36,7 @@ def calculate_XD(LD, LR):
 def calculate_Fe(V, Fr, Fa, X, Y):
     return float((X * V * Fr) + (Y * Fa))
 
-
+#
 # Display bearing type options
 print("1. Ball bearing")
 print("2. Cylinder Roller Bearing")
@@ -51,8 +56,8 @@ while True:
 # Set values based on bearing type selection
 if option == 1:
     print("Ball bearing selected")
-    a = 1 / 3
-    b = 1.488
+    a = 3
+    b = 1.483
     X_0 = 0.02
     theta = 4.459
     LR = pow(10, 6)
@@ -60,7 +65,7 @@ if option == 1:
 elif option == 2:
     print("Cylinder Roller Bearing selected")
     a = 10 / 3
-    b = 1.488
+    b = 1.483
     X_0 = 0.02
     theta = 4.459
     LR = pow(10, 6)
@@ -72,7 +77,8 @@ elif option == 3:
     X_0 = 0.0
     theta = 4.48
     LR = 90 * pow(10, 6)
-
+#
+#
 # Display ring rotation options
 print("\n1. Inner Ring Rotating")
 print("2. Outer Ring Rotating")
@@ -87,7 +93,7 @@ while True:
             print("Invalid input, please enter 1 or 2.")
     except ValueError:
         print("Invalid input, please enter a number (1 or 2).")
-
+#
 # Set values based on ring rotation selection
 if ring_option == 1:
     print("Inner Ring Rotating selected")
@@ -108,7 +114,7 @@ while True:
         break
     except ValueError:
         print("Invalid input, please enter a valid number.")
-
+#
 while True:
     axial_load = input("\nEnter axial load (required) -> ")
     if not axial_load:
@@ -130,7 +136,7 @@ while True:
             break
         except ValueError:
             print("Invalid input, please enter a numerical value.")
-
+#
 while True:
     desired_life = input("\nEnter desired life in hours (required) -> ")
     if not desired_life:
@@ -152,7 +158,7 @@ while True:
             break
         except ValueError:
             print("Invalid input, please enter a numerical value.")
-
+#
 while True:
     desired_reliability = input("\nEnter desired reliability in decimal (required) -> ")
     if not desired_reliability:
@@ -166,20 +172,86 @@ while True:
 
 LD = calculate_LD(ld=ld, nd=nd)
 XD = calculate_XD(LD=LD, LR=LR)
+print("XD",XD)
+print("LD",LD)
 
 table11_1 = pd.read_csv("../Data/11_point_1.csv")
+table11_2 = pd.read_csv("../Data/11_point_2.csv")
 num_rows = len(table11_1)
 num_rows_half = int(num_rows / 2)
 
 X = table11_1.loc[num_rows_half, "X2"]
 Y = table11_1.loc[num_rows_half, "Y2"]
+print("X and Y" , X,Y)
 FD = None
-
+#
 while True:
     Fe = calculate_Fe(V=V, Fa=Fa, Fr=Fr, X=X, Y=Y)
+    print("Fe",Fe)
     if Fe > Fr:
         FD = Fe
+        print("FD",FD)
     else:
         FD = Fr
+        print("FD",FD)
 
-    C_ten = float(af * FD * (XD / (X_0 + (theta - X_0) * (1 - R) ** 1 / b)) ** 1 / a)
+    # C_ten = float(af * FD * ((XD / (X_0 + (theta - X_0) * ((1 - R) ** 1 / b))) ** 1 / a))
+    C_ten = af * FD * ((XD / (X_0 + (theta - X_0) * (1 - R) ** (1 / b))) ** (1 / a))
+
+    print("Intial C_ten",C_ten)
+    for i in range(len(table11_2['Load Rating Deep Groove C10 (kN)'])):
+        if table11_2['Load Rating Deep Groove C10 (kN)'][i] > C_ten:
+            C_o = table11_2['Load Rating Deep Groove C0 (kN)'][i]
+            break
+    if C_o is not None:
+        Fa_by_Co = (Fa / C_o)
+
+    else:
+        print("Error: C_o is None, cannot perform division.")
+    for i in range(len(table11_1['Fa/C0'])):
+        print(i)
+        print("Fa_by_Co", Fa_by_Co)
+        if table11_1['Fa/C0'][i] > Fa_by_Co:
+            print("hi")
+            e2 = table11_1['e'][i]
+            e1 = table11_1['e'][i- 1]
+            print("e2 and e1", e2, e1)
+            break
+    Fa_by_VFr = Fa / (V * Fr)
+    print("Fa_by_VFr", Fa_by_VFr)
+    if e1 is not None:
+        if Fa_by_VFr <= e1:
+            X1 = 1
+            Y1 = 1
+        elif Fa_by_VFr >= e2:
+            X2 = 0.56
+            g = table11_1['Y2'][i - 1]
+            h = table11_1['Y2'][i]
+            k = table11_1['Fa/C0'][i - 1]
+            l = table11_1['Fa/C0'][i]
+            print(g,h,k,l)
+
+            Y2 = g - (((g) -(h))*(k-Fa_by_Co))/(k-l)
+            print("X2 and Y2", X2, Y2)
+    else:
+        print("e1 is none")
+    break
+    # for index,val in table11_2['Load Rating Deep Groove C10 (kN)']:
+    #     if val>C_ten:
+    #         C_o = table11_2['Load Rating Deep Groove C0 (kN)'][index]
+    #         print(C_o)
+    #
+    # Fa_by_Co = Fa/C_o
+    # for index,val in table11_1['Fa/C0']:
+    #     if val>Fa_by_Co:
+    #         e2 = table11_1['e'][index+1]
+    #         e1 = table11_1['e'][index-1]
+    #     print("e2 and e1",e2,e1)
+    #     Fa_by_VFr = Fa/(V*Fr)
+    #     if Fa_by_VFr <=e1:
+    #         X1 = 1
+    #         Y1=1
+    #     elif Fa_by_VFr >=e2:
+    #         X2 = 0.56
+    #         Y2 = (table11_1['Y2'][index-1] - ((table11_1['Y2'][index-1]-table11_1['Y2'][index])*(table11_1['Y2'][index]-Fa_by_Co))/((table11_1['Fa/C0'][index-1])-(table11_1['Fa/C0'][index])))
+    #         print("X2 and Y2",X2,Y2)
