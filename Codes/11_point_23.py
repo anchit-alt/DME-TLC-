@@ -232,7 +232,7 @@ while True:
             print(g,h,k,l)
 
             Y2 = g - (((g) -(h))*(k-Fa_by_Co))/(k-l)
-            print("X2 and Y2", X2, Y2)
+            print("X2 and Y2", X2, round(Y2,2))
     else:
         print("e1 is none")
     break
