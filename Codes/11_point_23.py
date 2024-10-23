@@ -25,6 +25,9 @@ X2 = None
 Y2 = None
 Fa_by_Co = None
 Fa_by_VFr = None
+
+C_ten_list = []
+
 def calculate_LD(ld, nd):
     return 60 * ld * nd
 
@@ -35,6 +38,54 @@ def calculate_XD(LD, LR):
 
 def calculate_Fe(V, Fr, Fa, X, Y):
     return float((X * V * Fr) + (Y * Fa))
+
+def iteration(j,l):
+    Fe = calculate_Fe(V=V, Fa=Fa, Fr=Fr, X=j, Y=l)
+    if Fe > Fr:
+        FD = Fe
+        print("FD\n",round(FD,2))
+    else:
+        FD = Fr
+        print("FD\n",round(FD,2))
+    C_ten = af * FD * ((XD / (X_0 + (theta - X_0) * (1 - R) ** (1 / b))) ** (1 / a))
+    print("C_ten\n",round(C_ten,2))
+    for i in range(len(table11_2['Load Rating Deep Groove C10 (kN)'])):
+        if table11_2['Load Rating Deep Groove C10 (kN)'][i] > C_ten:
+            if C_ten in C_ten_list:
+                print("Choose Bore of ", Bore (mm)[i-1])
+                return True
+                break
+            else:
+                C_ten_list.append(table11_2['Load Rating Deep Groove C10 (kN)'][i])
+                C_o_sec = table11_2['Load Rating Deep Groove C0 (kN)'][i]
+                print(C_o_sec)
+                break
+        if C_o_sec is not None:
+            Fa_by_Co = (Fa / C_o_sec)
+            for i in range(len(table11_1['Fa/C0'])):
+                print(i)
+                print("Fa_by_Co\n", round(Fa_by_Co,2))
+                if table11_1['Fa/C0'][i] > Fa_by_Co:
+                    e2 = table11_1['e'][i]
+                    e1 = table11_1['e'][i- 1]
+                    print("e2 and e1\n", e2, e1)
+                    break
+            Fa_by_VFr = Fa / (V * Fr)
+            print("Fa_by_VFr\n", Fa_by_VFr)
+            if e1 is not None:
+                if Fa_by_VFr <= e1:
+                    j = 1
+                    l = 1
+            elif Fa_by_VFr >= e2:
+                X2 = 0.56
+                g = table11_1['Y2'][i - 1]
+                h = table11_1['Y2'][i]
+                k = table11_1['Fa/C0'][i - 1]
+                l = table11_1['Fa/C0'][i]
+                Y2 = g - (((g) -(h))*(k-Fa_by_Co))/(k-l)
+                print("X2 and Y2\n", X2, round(Y2,2))
+    # if len(C_ten_list) != 0:
+    #     print("need more iterations")
 
 #
 # Display bearing type options
@@ -197,10 +248,12 @@ while True:
 
     # C_ten = float(af * FD * ((XD / (X_0 + (theta - X_0) * ((1 - R) ** 1 / b))) ** 1 / a))
     C_ten = af * FD * ((XD / (X_0 + (theta - X_0) * (1 - R) ** (1 / b))) ** (1 / a))
+   
 
     print("Intial C_ten\n",round(C_ten,2))
     for i in range(len(table11_2['Load Rating Deep Groove C10 (kN)'])):
         if table11_2['Load Rating Deep Groove C10 (kN)'][i] > C_ten:
+            C_ten_list.append(table11_2['Load Rating Deep Groove C10 (kN)'][i])
             C_o = table11_2['Load Rating Deep Groove C0 (kN)'][i]
             break
     if C_o is not None:
@@ -221,7 +274,7 @@ while True:
     if e1 is not None:
         if Fa_by_VFr <= e1:
             X1 = 1
-            Y1 = 1
+            Y1 = 0
         elif Fa_by_VFr >= e2:
             X2 = 0.56
             g = table11_1['Y2'][i - 1]
@@ -230,9 +283,62 @@ while True:
             l = table11_1['Fa/C0'][i]
             Y2 = g - (((g) -(h))*(k-Fa_by_Co))/(k-l)
             print("X2 and Y2\n", X2, round(Y2,2))
+
     else:
         print("e1 is none")
-    break
+    if iteration == True:
+        iteration(X2,Y2)
+    else:
+        break
+
+
+           # while C_ten_list[i] != C_ten_list[i+1]:
+            # iteration(X2,Y2)
+# second iteration
+            # Fe = calculate_Fe(V=V, Fa=Fa, Fr=Fr, X=X2, Y=Y2)
+            # if Fe > Fr:
+            #     FD = Fe
+            #     print("FD\n",round(FD,2))
+            # else:
+            #     FD = Fr
+            #     print("FD\n",round(FD,2))
+            # C_ten = af * FD * ((XD / (X_0 + (theta - X_0) * (1 - R) ** (1 / b))) ** (1 / a))
+            # print("C_ten\n",round(C_ten,2))
+            # for i in range(len(table11_2['Load Rating Deep Groove C10 (kN)'])):
+            #     if table11_2['Load Rating Deep Groove C10 (kN)'][i] > C_ten:
+            #         C_o = table11_2['Load Rating Deep Groove C0 (kN)'][i]
+            #         break
+            # if C_o is not None:
+            #     Fa_by_Co = (Fa / C_o)
+            # for i in range(len(table11_1['Fa/C0'])):
+            #     print(i)
+            #     print("Fa_by_Co\n", round(Fa_by_Co,2))
+            #     if table11_1['Fa/C0'][i] > Fa_by_Co:
+            #         e2 = table11_1['e'][i]
+            #         e1 = table11_1['e'][i- 1]
+            #         print("e2 and e1\n", e2, e1)
+            #         break
+            # Fa_by_VFr = Fa / (V * Fr)
+            # print("Fa_by_VFr\n", Fa_by_VFr)
+            # if e1 is not None:
+            #     if Fa_by_VFr <= e1:
+            #     X1 = 1
+            #     Y1 = 1
+            # elif Fa_by_VFr >= e2:
+            #     X2 = 0.56
+            #     g = table11_1['Y2'][i - 1]
+            #     h = table11_1['Y2'][i]
+            #     k = table11_1['Fa/C0'][i - 1]
+            #     l = table11_1['Fa/C0'][i]
+            #     Y2 = g - (((g) -(h))*(k-Fa_by_Co))/(k-l)
+            #     print("X2 and Y2\n", X2, round(Y2,2))
+
+
+
+
+
+
+
     # for index,val in table11_2['Load Rating Deep Groove C10 (kN)']:
     #     if val>C_ten:
     #         C_o = table11_2['Load Rating Deep Groove C0 (kN)'][index]
