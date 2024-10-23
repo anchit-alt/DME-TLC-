@@ -1,7 +1,7 @@
 import math
 from sympy import *
 from sympy import symbols, solve
-from PIL import Image
+# from PIL import Image
 import pandas as pd
 
 a = None
@@ -175,8 +175,8 @@ XD = calculate_XD(LD=LD, LR=LR)
 print("XD",XD)
 print("LD",LD)
 
-table11_1 = pd.read_csv("../Data/11_point_1.csv")
-table11_2 = pd.read_csv("../Data/11_point_2.csv")
+table11_1 = pd.read_csv("/Users/anchit/Documents/GitHub/DME-TLC-/Data/11_point_1.csv")
+table11_2 = pd.read_csv("/Users/anchit/Documents/GitHub/DME-TLC-/Data/11_point_2.csv")
 num_rows = len(table11_1)
 num_rows_half = int(num_rows / 2)
 
@@ -187,18 +187,18 @@ FD = None
 #
 while True:
     Fe = calculate_Fe(V=V, Fa=Fa, Fr=Fr, X=X, Y=Y)
-    print("Fe",Fe)
+    print("Fe\n",round(Fe,2))
     if Fe > Fr:
         FD = Fe
-        print("FD",FD)
+        print("FD\n",round(FD,2))
     else:
         FD = Fr
-        print("FD",FD)
+        print("FD\n",round(FD,2))
 
     # C_ten = float(af * FD * ((XD / (X_0 + (theta - X_0) * ((1 - R) ** 1 / b))) ** 1 / a))
     C_ten = af * FD * ((XD / (X_0 + (theta - X_0) * (1 - R) ** (1 / b))) ** (1 / a))
 
-    print("Intial C_ten",C_ten)
+    print("Intial C_ten\n",round(C_ten,2))
     for i in range(len(table11_2['Load Rating Deep Groove C10 (kN)'])):
         if table11_2['Load Rating Deep Groove C10 (kN)'][i] > C_ten:
             C_o = table11_2['Load Rating Deep Groove C0 (kN)'][i]
@@ -210,15 +210,14 @@ while True:
         print("Error: C_o is None, cannot perform division.")
     for i in range(len(table11_1['Fa/C0'])):
         print(i)
-        print("Fa_by_Co", Fa_by_Co)
+        print("Fa_by_Co\n", round(Fa_by_Co,2))
         if table11_1['Fa/C0'][i] > Fa_by_Co:
-            print("hi")
             e2 = table11_1['e'][i]
             e1 = table11_1['e'][i- 1]
-            print("e2 and e1", e2, e1)
+            print("e2 and e1\n", e2, e1)
             break
     Fa_by_VFr = Fa / (V * Fr)
-    print("Fa_by_VFr", Fa_by_VFr)
+    print("Fa_by_VFr\n", Fa_by_VFr)
     if e1 is not None:
         if Fa_by_VFr <= e1:
             X1 = 1
@@ -229,10 +228,8 @@ while True:
             h = table11_1['Y2'][i]
             k = table11_1['Fa/C0'][i - 1]
             l = table11_1['Fa/C0'][i]
-            print(g,h,k,l)
-
             Y2 = g - (((g) -(h))*(k-Fa_by_Co))/(k-l)
-            print("X2 and Y2", X2, round(Y2,2))
+            print("X2 and Y2\n", X2, round(Y2,2))
     else:
         print("e1 is none")
     break
