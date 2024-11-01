@@ -27,14 +27,14 @@ def data():
     d = float(input('Enter d: '))
     return r, D, d
 def get_q():
-    img3 = Image.open(r"/Users/anchit/Desktop/Gen Ai/Amazon/DME-TLC-/Images/6-20.png")
+    img3 = Image.open(r"/Users/anchit/Documents/GitHub/DME-TLC-/Images/6-20.png")
     img3.show()
     global q
     q = float(input('Enter q: '))
     return q
 def get_q_shear():
     global q_shear
-    img4 = Image.open(r"/Users/anchit/Desktop/Gen Ai/Amazon/DME-TLC-/Images/6-21.png")
+    img4 = Image.open(r"/Users/anchit/Documents/GitHub/DME-TLC-/Images/6-21.png")
     img4.show()
     q_shear = float(input('Enter q_shear: '))
     return q_shear
@@ -42,13 +42,13 @@ def get_kt():
     global kt
     print("r/d =",(r/d))
     print("D/d =",(D/d))
-    img2 = Image.open(r"/Users/anchit/Desktop/Gen Ai/Amazon/DME-TLC-/Images/A-15-9.png")
+    img2 = Image.open(r"/Users/anchit/Documents/GitHub/DME-TLC-/Images/A-15-9.png")
     img2.show()
     kt = float(input('Enter kt: '))
     return kt
 def get_kts():
     global kts
-    img1 = Image.open(r"/Users/anchit/Desktop/Gen Ai/Amazon/DME-TLC-/Images/A-15-8.png")
+    img1 = Image.open(r"/Users/anchit/Documents/GitHub/DME-TLC-/Images/A-15-8.png")
     img1.show()
     kts = float(input('Enter kts: '))
     return kts
@@ -73,19 +73,19 @@ def Se():
     else:
         Se_ = 700
     surfacefinish = input(
-        "What is the desired surface finish ('ground','machined','cold-drawn','hot-rolled','as-forged'): ")
+        "What is the desired surface finish ('1. ground','2. machined','3. cold-drawn','4. hot-rolled','5. as-forged'): ")
     surfacefinish = surfacefinish.lower()
 
-    if surfacefinish == 'ground':
+    if surfacefinish == '1':
         a = 1.58
         b = -0.085
-    elif surfacefinish == 'machined' or surfacefinish == 'cold-drawn':
+    elif surfacefinish == '2' or surfacefinish == '3':
         a = 4.51
         b = -0.265
-    elif surfacefinish == 'hot-rolled':
+    elif surfacefinish == '4':
         a = 57.7
         b = -0.718
-    elif surfacefinish == 'as-forged':
+    elif surfacefinish == '5':
         a = 272
         b = -0.995
 
@@ -93,23 +93,23 @@ def Se():
 
     ##Kb##
     # r,D,d = data()
-    loadoption = input("Enter load option ('bending', 'torsion', or 'axial'): ")
+    loadoption = input("Enter load option ('1. bending', '2. torsion', or '3. axial'): ")
     loadoption = loadoption.lower()
 
-    if loadoption == 'bending' or loadoption == 'torsion':
+    if loadoption == '1' or loadoption == '2':
         if d<= 51 and d>=2.79:
             kb =(d/7.62)**-0.107
         elif d>51 and d<=254:
             kb = 1.51 * d **-0.157
-    elif loadoption == 'axial':
+    elif loadoption == '3':
         kb = 1
     ##kc##
 
-    if loadoption == 'bending':
+    if loadoption == '1':
         kc = 1
-    elif loadoption == 'torsion':
+    elif loadoption == '2':
         kc =0.59
-    elif loadoption == 'axial':
+    elif loadoption == '3':
         kc = 0.85
     ##kd##
     temp = float(input("Enter temperature Tf if specified, 0 otherwise: "))
@@ -141,11 +141,11 @@ Kfs()
 Se()
 
 # Inputs for bending moment and torque type
-bending_moment_type = input("Enter bending moment type (constant/alternating): ").lower()
-torque_type = input("Enter torque type (constant/alternating): ").lower()
+bending_moment_type = input("Enter bending moment type (1. constant/ 2. alternating): ").lower()
+torque_type = input("Enter torque type (1. constant/ 2. alternating): ").lower()
 
 # Decision for M_m (mean bending moment) and M_a (alternating bending moment)
-if bending_moment_type == "alternating":
+if bending_moment_type == "2":
     Mm = 0
     Ma = float(input("Enter the value of alternating bending moment (M_a): "))
     print(f"Mean bending moment (Mm) is {Mm}.")
@@ -157,7 +157,7 @@ else:
     print(f"Alternating bending moment (Ma) is {Ma}.")
 
 # Decision for T_m (mean torque) and T_a (alternating torque)
-if torque_type == "alternating":
+if torque_type == "2":
     Tm = 0
     Ta = float(input("Enter the value of alternating torque (T_a): "))
     print(f"Mean torque (Tm) is {Tm}.")
