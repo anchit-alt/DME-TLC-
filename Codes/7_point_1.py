@@ -193,10 +193,10 @@ def DE_Soderberg():
 
 sigma_max_ = sqrt(((32*Kf*(Mm + Ma))/(math.pi*(d*pow(10,-3))**3))**2+3*((16*Kfs*(Tm+Ta))/(math.pi*(d*pow(10,-3))**3))**2)
 print("goodmann factor ",fac_DE_goodmann())
-print(fac_DE_Gerber())
-print(DE_ASME())
-print(DE_Soderberg())
+print("Gerber " , fac_DE_Gerber())
+print("DE_ASME ",DE_ASME())
+print("DE_Soderberg ",DE_Soderberg())
 print("Von misses stress  ", sigma_max_)
 ny = Sy/sigma_max_
-print("factor of safety",ny)
+print("factor of safety ",ny)
 
