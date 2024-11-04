@@ -47,15 +47,15 @@ def fluctuating_simple_loading():
 
     n = symbols
     if sig_m >= 0:
-        failurecriterion = input("Enter fatigue failure criterion ('Soderberg', 'mod-Goodman', 'Gerber', 'ASME-elliptic') :")
+        failurecriterion = input("Enter fatigue failure criterion ('1. Soderberg', '2. mod-Goodman', '3. Gerber', '4. ASME-elliptic') :")
         failurecriterion = failurecriterion.lower()
-        if failurecriterion == 'soderberg':
+        if failurecriterion == '1':
             print("Soderberg was chosen")
             n = 1/(sig_a/Se + sig_m/Sy)
-        elif failurecriterion == 'mod-goodman':
+        elif failurecriterion == '2':
             print("mod-goodman was chosen")
             n = 1/(sig_a/Se + sig_m/Sut)
-        elif failurecriterion == 'gerber':
+        elif failurecriterion == '3':
             print("gerber was chosen")
             n = symbols('n')
             print(sig_m,sig_a,Sut,Se)
@@ -76,7 +76,7 @@ def fluctuating_simple_loading():
             print("rcrit",r_crit)
 
 
-        elif failurecriterion == 'asme-elliptic':
+        elif failurecriterion == '4':
             print("asme-elliptic was chosen")
             n = 1/math.sqrt(pow(sig_a/Se, 2) + pow(sig_m/Sy, 2))
             r = 1
@@ -187,21 +187,22 @@ def combination_loading_modes():
     sig_m = ((Kf[0]*sig_mid[0] + Kf[1]*sig_mid[1]/0.85)**2 + 3*(Kf[2]*sig_mid[2])**2)**0.5
 
     if sig_m >= 0:
-        failurecriterion = input("Enter fatigue failure criterion ('Soderberg', 'mod-Goodman', 'Gerber', 'ASME-elliptic') :")
+        failurecriterion = input("Enter fatigue failure criterion (1. Soderberg', '2. mod-Goodman', '3. Gerber', '4. ASME-elliptic') :")
         failurecriterion = failurecriterion.lower()
-        if failurecriterion == 'soderberg':
+        if failurecriterion == '1':
             n = 1/(sig_a/Se + sig_m/Sy)
-        elif failurecriterion == 'mod-goodman':
+        elif failurecriterion == '2':
             n = 1/(sig_a/Se + sig_m/Sut)
-        elif failurecriterion == 'gerber':
-            n = symbols
-            n = solve(n*sig_a/Se + pow(n*sig_m/Sut, 2), n)
-        elif failurecriterion == 'asme-elliptic':
+        elif failurecriterion == '3':
+            n = symbols('n')
+            equation = (n*sig_a/Se) + pow(n*sig_m/Sut, 2)
+            n = solve(equation,n)
+        elif failurecriterion == '4':
             n = 1/math.sqrt(pow(sig_a/Se, 2) + pow(sig_m/Sy, 2))
     else:
         n = Se/sig_a, 2
 
-    print("Factor of saftey n on applying fatigue failure criterion is ", round(n, 2))
+    print("Factor of saftey n on applying fatigue failure criterion is ", n)
     
     n_yield = Sy/(sig_a + sig_m)
     if n_yield >= 1:
@@ -215,19 +216,19 @@ def calculate_endurance_limit(Sut):
     else:
         Se_ = 700
     
-    surfacefinish = input("What is the desired surface finish ('ground','machined','cold-drawn','hot-rolled','as-forged'): ")
+    surfacefinish = input("What is the desired surface finish ('1. ground','2. machined','3. cold-drawn','4. hot-rolled','5. as-forged'): ")
     surfacefinish = surfacefinish.lower()
     
-    if surfacefinish == 'ground':
+    if surfacefinish == '1':
         a = 1.58
         b = -0.085
-    elif surfacefinish == 'machined' or surfacefinish == 'cold-drawn':
+    elif surfacefinish == '2' or surfacefinish == '3':
         a = 4.51
         b = -0.265
-    elif surfacefinish == 'hot-rolled':
+    elif surfacefinish == '4':
         a = 57.7
         b = -0.718
-    elif surfacefinish == 'as-forged':
+    elif surfacefinish == '5':
         a = 272
         b = -0.995
     
@@ -240,16 +241,16 @@ def calculate_endurance_limit(Sut):
     kf = 1
     
     
-    loadoption = input("Enter load option ('bending', 'torsion', or 'axial'): ")
+    loadoption = input("Enter load option ('1. bending', '2. torsion', or '3. axial'): ")
     loadoption = loadoption.lower()
     
-    if loadoption == 'bending':
+    if loadoption == '1':
         kc = 1
-    elif loadoption == 'axial':
+    elif loadoption == '2':
         kb =1
-        kc = 0.85
-    elif loadoption == 'torsion':
         kc = 0.59
+    elif loadoption == '3':
+        kc = 0.85
     
     temp = float(input("Enter temperature Tf if specified, 0 otherwise: "))
     if temp == 0:
@@ -266,11 +267,11 @@ def calculate_endurance_limit(Sut):
     
     kf = 1
     
-    rotresp = input("Is it a Rotating Shaft or Non-rotating Member? ")
+    rotresp = input("Is it a 1. Rotating Shaft or 2. Non-rotating Member? ")
     rotresp = rotresp.lower()     
-    if rotresp == 'rotating shaft':  
+    if rotresp == '1':  
             
-        if loadoption == 'bending' or loadoption == 'torsion':
+        if loadoption == '1' or loadoption == '2':
             d = float(input("Enter the value of diameter in mm, and 0 if unknown: "))
             dia = d       
         else:
@@ -285,7 +286,7 @@ def calculate_endurance_limit(Sut):
         dia = d
         print("Effective diameter :", d)
     
-    if 2.79 <= d and d <= 51 and loadoption != 'axial':
+    if 2.79 <= d and d <= 51 and loadoption != '3':
         kb = 1.24 * pow(d, -0.107)
     elif 51 <= d and d <=254:
         kb = 1.51 * pow(d, -0.157)
@@ -371,7 +372,7 @@ def determineK(Sut):
         else:
             print("Invalid serial number entered.")
     
-    with open('./DataExtraction/A-15-1.csv', mode='r') as file:
+    with open('/Users/anchit/Documents/GitHub/DME-TLC-/Codes/DataExtraction/A-15-1.csv', mode='r') as file:
         csv_data = csv.reader(file)
 
     Kt = 1
@@ -389,13 +390,13 @@ def determineK(Sut):
 def notchsensitivity(Sut):
     global dia
     global r
-    load = input("Enter load option ('bending' , 'axial', or 'torsion'): ")
-    if load == 'bending' or load == 'axial' or load == 'torsion':
+    load = input("Enter load option ('1. bending' , '2. axial', or '3. torsion'): ")
+    if load == '1' or load == '2' or load == '3':
         load = load.lower()
     else:
         print("Invalid load option entered.")
     r = dia/2
-    if load == 'bending' or load == 'axial':
+    if load == '1' or load == '2':
         sqrta = 1.24 - 2.25*10E-3*Sut + 1.60*10E-5*Sut**2 - 4.11*10E-8*Sut**3 # Changed ^ to **
     else:
         sqrta = 0.958 -1.83*10E-3*Sut + 1.43*10E-5*Sut**2 - 4.11*10E-8*Sut**3 # Changed ^ to **
@@ -457,16 +458,16 @@ def checkcompatibility(d, ka, kc, kd, ke, kf, Se_):
     return kb_calc, kb
     
 def process_loading_option():
-    user_input = input("Enter loading option ('completely reversing simple loading', 'fluctuating simple loading', or 'combination of loading modes'): ")
+    user_input = input("Enter loading option ('1. completely reversing simple loading', '2. fluctuating simple loading', or '3. combination of loading modes'): ")
     user_input = user_input.lower()  
 
-    if user_input == 'completely reversing simple loading':
+    if user_input == '1':
         result = reverse_simple_loading()
         print(result)
-    elif user_input == 'fluctuating simple loading':
+    elif user_input == '2':
         result = fluctuating_simple_loading()
         print(result)
-    elif user_input == 'combination of loading modes':
+    elif user_input == '3':
         result = combination_loading_modes()
         print(result)
     else:
