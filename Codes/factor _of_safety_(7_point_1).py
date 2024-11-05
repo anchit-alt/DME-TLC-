@@ -127,7 +127,7 @@ def Se():
     kf = 1
 
     Se = ka*kb*kc*kd*ke*kf*Se_
-    print(Se)
+    print("Se ",Se)
     return Se
 
 
