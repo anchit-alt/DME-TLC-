@@ -247,10 +247,11 @@ def calculate_endurance_limit(Sut):
     if loadoption == '1':
         kc = 1
     elif loadoption == '2':
-        kb =1
+        # kb =1
         kc = 0.59
     elif loadoption == '3':
         kc = 0.85
+        kb=1
     
     temp = float(input("Enter temperature Tf if specified, 0 otherwise: "))
     if temp == 0:
@@ -295,7 +296,7 @@ def calculate_endurance_limit(Sut):
         assumption = assumption.lower()
         if assumption == 'kb':
             assumedkb = float(input("Enter assumed value of Kb :")) #assume kb = 0.85 to start iterations
-            #kb = iterate(assumedkb, Sut, Se) 
+            kb = iterate(assumedkb) 
         else:
             while True:
                 assume_d = float(input("Enter assumed value of d: "))
@@ -331,18 +332,20 @@ def calculate_endurance_limit(Sut):
     
     return round(Se, 2)
 
-# def iterate(assumedKb, Sut, Se):
-#     sig_max = float(input("Enter the value of maximum stress (MPa) :"))
-#     N = float(input("Enter number of cycles to failure"))
-#     a, b = fatiguelifeconstants(Sut, Se)
+def iterate(assumedKb):
+    sig_max = float(input("Enter the value of maximum stress (MPa) :"))
+    N = float(input("Enter number of cycles to failure"))
+    # a, b = fatiguelifeconstants(Sut, Se)
+    h = float(input("Input value h (in mm) of rectangular cross-section of shaft :"))
+    b = float(input("Enter value b (in mm) of rectangular cross-section of shaft :"))
     
-#     d = 0.808*pow(h*b, 0.5)
-#     if 2.79 <= d <= 51:
-#         kb = 1.24 * pow(d, -0.107)
-#     else:
-#         kb = 1.51 * pow(d, -0.157)
+    d = 0.808*pow(h*b, 0.5)
+    if 2.79 <= d <= 51:
+        kb = 1.24 * pow(d, -0.107)
+    else:
+        kb = 1.51 * pow(d, -0.157)
         
-#     return kb
+    return kb
 
 def determineK(Sut):
     global dia
