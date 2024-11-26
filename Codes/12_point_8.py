@@ -1,6 +1,7 @@
 import pandas as pd 
 import cv2
-
+import math
+from PIL import Image
 table_12_13 = pd.read_csv("/Users/anchit/Documents/GitHub/DME-TLC-/Data/viscosity_data.csv")
 
 def mue_if_temp():
@@ -75,7 +76,7 @@ def mue_ifnot_temp():
 
 d = float(input("Enter the value of d "))
 b = float(input("Enter bushing bore diameter "))
-cmin = (d - b)/2
+cmin = (b-d)/2
 print("cmin ",cmin)
 
 l = int(input("Enter the value of bushing length "))
@@ -119,15 +120,51 @@ import matplotlib.image as mpimg
 
 
 # Load an image
-img_12_16 = mpimg.imread('/Users/anchit/Documents/GitHub/DME-TLC-/Images/12_16.png')
+img_12_16 = Image.open(r"/Users/anchit/Documents/GitHub/DME-TLC-/Images/12_16.png")
+img_12_16.show()
 
-
-# Display the image
-imgplot_12_16 = plt.imshow(img_12_16)
-plt.show()
+# img_12_16 = mpimg.imread('/Users/anchit/Documents/GitHub/DME-TLC-/Images/12_16.png')
+# imgplot_12_16 = plt.imshow(img_12_16)
+# plt.show()
 
 hnot_by_c = float(input("Enter the value of ho / c "))
 
+ho = hnot_by_c * cmin
+
+print("ho ",ho)
+
+img_12_18 = Image.open(r"/Users/anchit/Documents/GitHub/DME-TLC-/Images/12_18.png")
+img_12_18.show()
+
+# img_12_18 = mpimg.imread('/Users/anchit/Documents/GitHub/DME-TLC-/Images/12_18.png')
+# imgplot_12_18 = plt.show(img_12_18)
+# plt.show()
+
+rfbyc = float(input("Enter the value of r * f / c "))
+f = rfbyc * cmin / r
+
+print("f ",f)
+
+
+img_12_21 = Image.open(r"/Users/anchit/Documents/GitHub/DME-TLC-/Images/12_21.png")
+img_12_21.show()
+
+# img_12_21 = mpimg.imread('/Users/anchit/Documents/GitHub/DME-TLC-/Images/12_21.png')
+# imgplot_12_21 = plt.show(img_12_21)
+# plt.show()
+
+p_by_pmax = float(input("Enter the value of p / pmax "))
+pmax = P / p_by_pmax
+
+print("pmax " , pmax)
+
+T = f * W * r 
+H_loss = 2 * math.pi * T * N
+
+
+
+print("Torque ", T)
+print("H_loss ",H_loss)
 
 
 
