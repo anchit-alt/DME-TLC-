@@ -112,7 +112,7 @@ print("mue ", mue)
 
 
 
-S = (((r_by_c)**2)*(mue*N/P))
+S = (((r_by_c)**2)*(mue*N/P)) * pow(10,-12)
 print("Sommerfield Number ", S)
 
 import matplotlib.pyplot as plt
@@ -123,10 +123,6 @@ import matplotlib.image as mpimg
 img_12_16 = Image.open(r"/Users/anchit/Documents/GitHub/DME-TLC-/Images/12_16.png")
 img_12_16.show()
 
-# img_12_16 = mpimg.imread('/Users/anchit/Documents/GitHub/DME-TLC-/Images/12_16.png')
-# imgplot_12_16 = plt.imshow(img_12_16)
-# plt.show()
-
 hnot_by_c = float(input("Enter the value of ho / c "))
 
 ho = hnot_by_c * cmin
@@ -136,9 +132,6 @@ print("ho ",ho)
 img_12_18 = Image.open(r"/Users/anchit/Documents/GitHub/DME-TLC-/Images/12_18.png")
 img_12_18.show()
 
-# img_12_18 = mpimg.imread('/Users/anchit/Documents/GitHub/DME-TLC-/Images/12_18.png')
-# imgplot_12_18 = plt.show(img_12_18)
-# plt.show()
 
 rfbyc = float(input("Enter the value of r * f / c "))
 f = rfbyc * cmin / r
@@ -148,10 +141,6 @@ print("f ",f)
 
 img_12_21 = Image.open(r"/Users/anchit/Documents/GitHub/DME-TLC-/Images/12_21.png")
 img_12_21.show()
-
-# img_12_21 = mpimg.imread('/Users/anchit/Documents/GitHub/DME-TLC-/Images/12_21.png')
-# imgplot_12_21 = plt.show(img_12_21)
-# plt.show()
 
 p_by_pmax = float(input("Enter the value of p / pmax "))
 pmax = P / p_by_pmax
