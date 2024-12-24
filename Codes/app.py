@@ -15,12 +15,12 @@ def delay_decorator(function):
 
 @app.route("/")
 def hello_world():
-    return render_template("website.html")
+    return render_template("index.html")
 
 
 @app.route("/<name>")
 def say_bye(name):
-    return f"hi {name}  "
+    return render_template("generic.html")
 
 
 if __name__ == "__main__":
