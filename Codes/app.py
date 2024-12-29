@@ -18,9 +18,9 @@ def hello_world():
     return render_template("index.html")
 
 
-@app.route("/<name>")
-def say_bye(name):
-    return render_template("generic.html")
+@app.route("/ball_bearing.html")
+def say_bye():
+    return render_template("ball_bearing.html")
 
 
 if __name__ == "__main__":
