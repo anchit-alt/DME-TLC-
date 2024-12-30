@@ -13,7 +13,7 @@ html, body {
     background-color: #152733;
     overflow: hidden;
 }
-
+html,body{overflow-y: scroll; }
 
 .form-holder {
       display: flex;
