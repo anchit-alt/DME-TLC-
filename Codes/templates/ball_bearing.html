@@ -16,19 +16,19 @@
                         <h3>Get Catalog Rating</h3>
                         <p>Fill in the data below.</p>
                         <form  action="#" method="post" class="requires-validation" novalidate>
-                            <div class="col-md-12">
+                            <!-- <div class="col-md-12">
                                 <select class="form-select mt-3" required>
                                       <option selected disabled value="">Ball/Taper/Cylindrical</option>
-                                      <option name= "ball "value="ball">Ball</option>
+                                      <option value="ball">Ball</option>
                                       <option value="taper">Taper</option>
                                       <option value="cylindrical">Cylindrical</option>
                                </select>
                                 <div class="valid-feedback">You selected a position!</div>
                                 <div class="invalid-feedback">Please select a position!</div>
-                           </div>
+                           </div> -->
 
                          
-                            <div class="col-md-12">
+                            <!-- <div class="col-md-12">
                                 <select class="form-select mt-3" required>
                                       <option selected disabled value="">Inner Ring Rotating / Outer Ring Rotating</option>
                                       <option value="jweb">Inner</option>
@@ -36,13 +36,18 @@
                                </select>
                                 <div class="valid-feedback">You selected a position!</div>
                                 <div class="invalid-feedback">Please select a position!</div>
-                           </div>
+                           </div> -->
+                            <div class="col-md-12">
+                                <input class="form-control" type="text" name="name" placeholder="Ball/Taper/Cylindrical" required>
+                                <div class="valid-feedback">Username field is valid!</div>
+                                <div class="invalid-feedback">Username field cannot be blank!</div>
+                             </div> 
 
-                            <!-- <div class="col-md-12">
-                               <input class="form-control" type="text" name="name" placeholder="Inner/outer" required>
+                            <div class="col-md-12">
+                               <input class="form-control" type="text" name="ring_rotation" placeholder="inner/outer" required>
                                <div class="valid-feedback">Username field is valid!</div>
                                <div class="invalid-feedback">Username field cannot be blank!</div>
-                            </div> -->
+                            </div>
 
                             <div class="col-md-12">
                                 <input class="form-control" type="number" name="af" placeholder="application factor" required>

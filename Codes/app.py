@@ -25,10 +25,10 @@ def home():
 def ball():
     if request.method == "POST":
         ###bearing type
-        ball = request.form.get('ball')
+        ball = request.form.get('name')
         print(ball)
-        taper = request.form.get('taper')
-        cylindrical = request.form.get('cylindrical')
+        taper = request.form.get('name')
+        cylindrical = request.form.get('name')
         if ball == "Ball":
             print("Ball bearing selected")
             a = 3
@@ -50,19 +50,20 @@ def ball():
             X_0 = 0.02
             theta = 4.459
             LR = pow(10, 6)
-        inner_ring = request.form.get('jweb')
-        if inner_ring == "Inner":
+        inner_ring = request.form.get('ring_rotation')
+        if inner_ring == "inner":
             V =1
-        # outer_ring = request.form.get('sweb')
-        # elif outer_ring == "Outer":
-        #     V = 1.2
+        outer_ring = request.form.get('ring_rotation')
+        if outer_ring == "outer":
+            V = 1.2
         
-
         af = request.form.get('af')
         Fa = request.form.get("Axial_load")
         Fr = request.form.get("Radial_load")
         ld = float(request.form.get("desired_life"))
         nd = float(request.form.get("desired_speed"))
+
+        print(af,Fa,Fr,ld,nd)
         def calculate_LD(ld, nd):
             return 60 * ld * nd
         def calculate_XD(LD, LR):
