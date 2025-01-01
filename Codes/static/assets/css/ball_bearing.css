@@ -40,7 +40,7 @@ html,body{overflow-y: scroll; }
 }
 
 .form-content .form-items {
-    border: 3px solid #fff;
+    border: 7px solid #fff;
     padding: 40px;
     display: inline-block;
     width: 100%;
@@ -55,7 +55,7 @@ html,body{overflow-y: scroll; }
 
 .form-content h3 {
     color: #fff;
-    text-align: left;
+    text-align: center;
     font-size: 28px;
     font-weight: 600;
     margin-bottom: 5px;
@@ -67,7 +67,7 @@ html,body{overflow-y: scroll; }
 
 .form-content p {
     color: #fff;
-    text-align: left;
+    text-align: center;
     font-size: 17px;
     font-weight: 300;
     line-height: 20px;
@@ -100,14 +100,14 @@ html,body{overflow-y: scroll; }
     background-color: #6C757D;
     outline: none;
     border: 0px;
-     box-shadow: none;
+    box-shadow: none;
 }
 
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active{
     background-color: #495056;
     outline: none !important;
     border: none !important;
-     box-shadow: none;
+    box-shadow: none;
 }
 
 .form-content textarea {
@@ -146,4 +146,8 @@ html,body{overflow-y: scroll; }
 
 .valid-feedback{
    color: #2acc80;
+}
+
+.col-md-12 {
+    margin-bottom: 2%;
 }
