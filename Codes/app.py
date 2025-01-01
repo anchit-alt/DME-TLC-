@@ -7,7 +7,7 @@ import time
 from flask import Flask , render_template , request
 import pandas as pd 
 app = Flask(__name__)
-
+dummy = None
 def delay_decorator(function):
     def wrapper_function():
         time.sleep(2)
@@ -25,25 +25,21 @@ def home():
 def ball():
     if request.method == "POST":
         ###bearing type
-        ball = request.form.get('name')
-        print(ball)
-        taper = request.form.get('name')
-        cylindrical = request.form.get('name')
-        if ball == "Ball":
+        if request.form.get('name') == "Ball":
             print("Ball bearing selected")
             a = 3
             b = 1.483
             X_0 = 0.02
             theta = 4.459
             LR = pow(10, 6)
-        elif taper == "Taper":
+        elif request.form.get('name') == "Taper":
             print("Tapered Roller Bearing selected")
             a = 10 / 3
             b = 1.5
             X_0 = 0.0
             theta = 4.48
             LR = 90 * pow(10, 6)
-        elif cylindrical == "Cylindrical":
+        else:
             print("Cylinder Roller Bearing selected")
             a = 10 / 3
             b = 1.483
@@ -52,14 +48,14 @@ def ball():
             LR = pow(10, 6)
         inner_ring = request.form.get('ring_rotation')
         if inner_ring == "inner":
-            V =1
-        outer_ring = request.form.get('ring_rotation')
-        if outer_ring == "outer":
+            V =1.0
+        else:
+            outer_ring = request.form.get('ring_rotation')
             V = 1.2
         
-        af = request.form.get('af')
-        Fa = request.form.get("Axial_load")
-        Fr = request.form.get("Radial_load")
+        af = float(request.form.get('af'))
+        Fa = float(request.form.get("Axial_load"))
+        Fr = float(request.form.get("Radial_load"))
         ld = float(request.form.get("desired_life"))
         nd = float(request.form.get("desired_speed"))
 
@@ -71,7 +67,7 @@ def ball():
         def calculate_Fe(V, Fr, Fa, X, Y):
             return float((X * V * Fr) + (Y * Fa))
         LD = calculate_LD(ld, nd)
-        R = request.form.get("desired_reliability")
+        R = float(request.form.get("desired_reliability"))
         XD = calculate_XD(LD=LD, LR=LR)
 
         table11_1 = pd.read_csv("Data/11_point_1.csv")
@@ -107,7 +103,8 @@ def ball():
                         if table11_2['Load Rating Deep Groove C10 (kN)'][i] in C_ten_list:
                             print(f"Converged on C_10 value: {table11_2['Load Rating Deep Groove C10 (kN)'][i]} kN")
                             print(f"Select bore of :{table11_2['Bore (mm)'][i]} mm" )
-                            return True  # Exit the loop
+                            dummy = table11_2['Bore (mm)'][i]
+                            return table11_2['Bore (mm)'][i]  # Exit the loop
                         else:
                             C_ten_list.append(table11_2['Load Rating Deep Groove C10 (kN)'][i])
                             C_o_sec = table11_2['Load Rating Deep Groove C0 (kN)'][i]  # Update C_o_sec
@@ -147,7 +144,12 @@ def ball():
                 else:
                     print("Error: C_o_sec is None, cannot proceed with calculations.")
                     break
-        return iteration(X,Y)
+        # iteration(X,Y)
+        selected_bore = iteration(X,Y)
+        if selected_bore:
+            return f"Select bore of: {selected_bore} mm"
+        else:
+            return "Unable to select a suitable bore."
     else:
         return render_template("ball_bearing.html")
 
