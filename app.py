@@ -1,10 +1,11 @@
 from bs4 import BeautifulSoup
+import os
 import lxml
 import math
 from sympy import *
 from sympy import symbols, solve
 import time 
-from flask import Flask , render_template , request
+from flask import Flask , render_template , request , current_app
 import pandas as pd 
 app = Flask(__name__)
 dummy = None
@@ -18,7 +19,9 @@ def delay_decorator(function):
 
 @app.route("/")
 def home():
+    # template_path = os.path.abspath("/Users/anchit/Documents/GitHub/DME-TLC-/Codes/templates/index.html")
     return render_template("index.html")
+            # render_template("/Users/anchit/Documents/GitHub/DME-TLC-/Codes/templates/index.html")
 
 
 @app.route("/ball_bearing.html",methods = ["POST","GET"])
