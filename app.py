@@ -56,7 +56,7 @@ def ball():
             outer_ring = request.form.get('ring_rotation')
             V = 1.2
         
-        af = float(request.form.get('af'))
+        af = float(request.form.get('af')) or int(request.form.get('af'))
         Fa = float(request.form.get("Axial_load"))
         Fr = float(request.form.get("Radial_load"))
         ld = float(request.form.get("desired_life"))
