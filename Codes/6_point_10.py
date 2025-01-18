@@ -375,7 +375,7 @@ def determineK(Sut):
         else:
             print("Invalid serial number entered.")
     
-    with open('/Users/anchit/Documents/GitHub/DME-TLC-/Codes/DataExtraction/A-15-1.csv', mode='r') as file:
+    with open('DataExtraction/A-15-1.csv', mode='r') as file:
         csv_data = csv.reader(file)
 
     Kt = 1
