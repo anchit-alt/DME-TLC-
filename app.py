@@ -156,9 +156,17 @@ def ball():
     else:
         return render_template("ball_bearing.html")
 
+@app.route("/fos.html",methods = ["POST","GET"])
+def factor():
+    if request.method == "POST":
+        pass
+    return render_template("fos.html")
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)
+
 
 
 # class User:
