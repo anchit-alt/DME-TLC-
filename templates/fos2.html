@@ -3,7 +3,7 @@
     <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Get fatigue strength</title>
+    <title>ball bearing</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="static/assets/css/ball_bearing.css"></link>
     </head>
@@ -13,11 +13,11 @@
             <div class="form-holder">
                 <div class="form-content">
                     <div class="form-items">
-                        <h3>Get Fatigue Strength / Number of Cycles to Failure</h3>
+                        <h3>Get Factor of Safety / Number of Cycles to Failure</h3>
                         <p>Fill in the data below</p>
                         <form  action="#" method="post" class="requires-validation" novalidate>
-                            <div class="col-md-12">
-                                <select name="type_of_loading" class="form-select mt-3" required>
+                            <!-- <div class="col-md-12">
+                                <select class="form-select mt-3" required>
                                       <option selected disabled value="">Type of loading</option>
                                       <option value="CRSL">completely reversing simple loading</option>
                                       <option value="FSL">fluctuating simple loading</option>
@@ -25,14 +25,14 @@
                                </select>
                                 <div class="valid-feedback">You selected a position!</div>
                                 <div class="invalid-feedback">Please select a position!</div>
-                           </div>
+                           </div> -->
                            <div class="col-md-12">
                             <input class="form-control" type="number" name="Sut" placeholder="Sut" required>
                              <div class="valid-feedback">Email field is valid!</div>
                              <div class="invalid-feedback">Email field cannot be blank!</div>
                             </div>
                             <div class="col-md-12">
-                                <select name ="surface_finish" class="form-select mt-3" required>
+                                <select class="form-select mt-3" required>
                                       <option selected disabled value="">desired surface finish</option>
                                       <option value="G">ground</option>
                                       <option value="M">machined</option>
@@ -44,7 +44,7 @@
                                 <div class="invalid-feedback">Please select a position!</div>
                            </div>
                            <div class="col-md-12">
-                            <select name="loading_option_1" class="form-select mt-3" required>
+                            <select class="form-select mt-3" required>
                                   <option selected disabled value="">Loading Option</option>
                                   <option value="bending">bending</option>
                                   <option value="torsion">torsion</option>
@@ -64,70 +64,20 @@
                              <div class="valid-feedback">Email field is valid!</div>
                              <div class="invalid-feedback">Email field cannot be blank!</div>
                            </div>
-                           <div class="col-md-12">
-                            <select name="rotating/non-rotating"class="form-select mt-3" required>
+                           <!-- <div class="col-md-12">
+                            <select class="form-select mt-3" required>
                                   <option selected disabled value="">Rotating Shaft / Non Rotating Member</option>
                                   <option value="rotating">Rotating Shaft</option>
                                   <option value="non-rotating">Non Rotating Member</option>
                            </select>
                             <div class="valid-feedback">You selected a position!</div>
                             <div class="invalid-feedback">Please select a position!</div>
-                           </div>
+                           </div> -->
                            <div class="col-md-12">
-                            <input class="form-control" type="number" name="dia" placeholder="diameter">
+                            <input class="form-control" type="number" name="af" placeholder="diameter" required>
                              <div class="valid-feedback">Email field is valid!</div>
                              <div class="invalid-feedback">Email field cannot be blank!</div>
                            </div>
-                           <div class="col-md-12">
-                           <input class="form-control" type="number" name="kb" placeholder="width (Non-Rotating Member)">
-                             <div class="valid-feedback">Email field is valid!</div>
-                             <div class="invalid-feedback">Email field cannot be blank!</div>
-                           </div>
-                           <div class="col-md-12">
-                            <input class="form-control" type="number" name="height" placeholder="height (Non-Rotating Member)">
-                             <div class="valid-feedback">Email field is valid!</div>
-                             <div class="invalid-feedback">Email field cannot be blank!</div>
-                           </div>
-                           <div class="col-md-12">
-                            <select name="kb/d"class="form-select mt-3" >
-                                  <option selected disabled value="">Assumption of Kb or dia</option>
-                                  <option value="kb">Kb</option>
-                                  <option value="d">diameter</option>
-                           </select>
-                            <div class="valid-feedback">You selected a position!</div>
-                            <div class="invalid-feedback">Please select a position!</div>
-                           </div>
-                           <div class="col-md-12">
-                            <input class="form-control" type="number" name="assumed_kb" placeholder="Assume Kb">
-                             <div class="valid-feedback">Email field is valid!</div>
-                             <div class="invalid-feedback">Email field cannot be blank!</div>
-                           </div>
-                           <div class="col-md-12">
-                            <input class="form-control" type="number" name="sigma_max" placeholder="maximum stress (MPa) (ONLY if you assumed kb)">
-                             <div class="valid-feedback">Email field is valid!</div>
-                             <div class="invalid-feedback">Email field cannot be blank!</div>
-                           </div>
-                           <div class="col-md-12">
-                            <input class="form-control" type="number" name="N_assume_kb_case" placeholder="number of cycles to failure (ONLY if you assumed kb)">
-                             <div class="valid-feedback">Email field is valid!</div>
-                             <div class="invalid-feedback">Email field cannot be blank!</div>
-                           </div>
-                           <div class="col-md-12">
-                            <input class="form-control" type="number" name="h_assume_kb_case" placeholder="h (ONLY if you assumed kb)">
-                             <div class="valid-feedback">Email field is valid!</div>
-                             <div class="invalid-feedback">Email field cannot be blank!</div>
-                           </div>
-                           <div class="col-md-12">
-                            <input class="form-control" type="number" name="b_assume_kb_case" placeholder="b (ONLY if you assumed kb)">
-                             <div class="valid-feedback">Email field is valid!</div>
-                             <div class="invalid-feedback">Email field cannot be blank!</div>
-                           </div>
-                           <div class="col-md-12">
-                            <input class="form-control" type="number" name="assumed_dia" placeholder="Assume dia">
-                             <div class="valid-feedback">Email field is valid!</div>
-                             <div class="invalid-feedback">Email field cannot be blank!</div>
-                           </div>
-                           
                            <!-- <div class="col-md-12">
                             <input class="form-control" type="number" name="af" placeholder="height for Non-rotating member only" required>
                              <div class="valid-feedback">Email field is valid!</div>
@@ -139,7 +89,7 @@
                              <div class="invalid-feedback">Email field cannot be blank!</div>
                            </div> -->
                            <div class="col-md-12">
-                            <select name = "loading_option_2"class="form-select mt-3" required>
+                            <select class="form-select mt-3" required>
                                   <option selected disabled value="">Loading Option</option>
                                   <option value="bending">bending</option>
                                   <option value="torsion">torsion</option>
@@ -149,25 +99,15 @@
                             <div class="invalid-feedback">Please select a position!</div>
                            </div>
                            <div class="col-md-12">
-                            <input class="form-control" type="number" name="reversing_stress" placeholder="Purely Reversing Stress" required>
+                            <input class="form-control" type="number" name="af" placeholder="Purely Reversing Stress" required>
                              <div class="valid-feedback">Email field is valid!</div>
                              <div class="invalid-feedback">Email field cannot be blank!</div>
                            </div>
                            <div class="col-md-12">
-                            <select name = "known_unknown"class="form-select mt-3" required>
-                                  <option selected disabled value="">Do you know N </option>
-                                  <option value="known">Known</option>
-                                  <option value="unknown">Unknown</option>
-                           </select>
-                            <div class="valid-feedback">You selected a position!</div>
-                            <div class="invalid-feedback">Please select a position!</div>
-                           </div>
-                           <div class="col-md-12">
-                            <input class="form-control" type="number" name="Number_of_cycles" placeholder="Number of Cycles to failure / 0 if not known" required>
+                            <input class="form-control" type="number" name="af" placeholder="Enter number of cycles to failure N, 0 if not known" required>
                              <div class="valid-feedback">Email field is valid!</div>
                              <div class="invalid-feedback">Email field cannot be blank!</div>
                            </div>
-                           
                            
 
                          

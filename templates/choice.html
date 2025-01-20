@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loading Option</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f0f0f0;
+    }
+
+    .button-container {
+      display: flex;
+      gap: 20px;
+    }
+
+    .button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .button-primary {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .button-primary:hover {
+      background-color: #0056b3;
+    }
+
+    .button-secondary {
+      background-color: #6c757d;
+      color: white;
+    }
+
+    .button-secondary:hover {
+      background-color: #5a6268;
+    }
+
+    .button-danger {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .button-danger:hover {
+      background-color: #c82333;
+    }
+  </style>
+</head>
+<body>
+  <div class="button-container">
+    <a class="button button-primary" href="/fos1.html" >completely reversing simple loading , Rotating Shaft , Number of cycles known </a>
+    <a class="button button-primary" href="/fos2.html" >completely reversing simple loading , Rotating Shaft , Number of cycles Not known  </a>
+    <a class="button button-primary" href="/fos.html" >completely reversing simple loading , Non-Rotating Shaft , Number of cycles known  </a>
+    <a class="button button-primary" href="/fos.html" >completely reversing simple loading , Non-Rotating Shaft , Number of cycles Not known  </a>
+    <button class="button button-secondary">fluctuating simple loading</button>
+    <button class="button button-danger">combination of loading modes</button>
+  </div>
+</body>
+</html>
