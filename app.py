@@ -647,8 +647,9 @@ def page1():
                 print("Invalid option. Please enter a valid loading option.")
 
         #test run
-        process_loading_option()
-        # return f"Answer {res}"
+        result = process_loading_option()
+        return f"Answer {result}"
+        
     else:
         return render_template("fos.html")
 
