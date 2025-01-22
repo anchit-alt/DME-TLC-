@@ -648,7 +648,7 @@ def page1():
 
         #test run
         result = process_loading_option()
-        return f"Answer {result}"
+        return f"Answer :  {result}"
         
     else:
         return render_template("fos.html")
