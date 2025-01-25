@@ -284,13 +284,15 @@ def page1():
             # N = float(input("Enter number of cycles to failure N, 0 if unknown:")) #computes Sf
             if known_unknown_N == "known":
                 N = float(request.form.get("Number_of_cycles"))
-                if N != 0:
+                if N != 0.0:
                     Sf = a*pow(N, b)
                     print("Fatigure strength at N cycles :", Sf)
+                    print("N",N)
                     return Sf
             else:
                 N = pow(sig_rev/a, 1/b)
                 print("Number of cycles to failure at reversing stress :", round(N, 2))
+                print("N",N)
                 return round(N,2)
         def combination_loading_modes():
             global Sut
