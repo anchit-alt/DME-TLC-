@@ -454,13 +454,14 @@ def page1():
             elif 51 <= d and d <=254:
                 kb = 1.51 * pow(d, -0.157)
             elif d == 0:
-                assumption = float(request.form.get("kb/d"))
+                assumption = request.form.get("kb_d")
                 # assumption = input("Do you want to assume the value of kb or d?")
                 # assumption = assumption.lower()
-                if assumption == 'kb':
+                if assumption == 'Kb':
                     assumedkb = float(request.form.get("assumed_kb"))
                     # assumedkb = float(input("Enter assumed value of Kb :")) #assume kb = 0.85 to start iterations
                     kb = iterate(assumedkb) 
+                    print(kb)
                 else:
                     while True:
                         assume_d = float(request.form.get("assumed_dia"))
@@ -498,6 +499,8 @@ def page1():
             return round(Se, 2)
 
         def iterate(assumedKb):
+            global d
+            global dia
             sig_max = float(request.form.get("sigma_max"))
             # sig_max = float(input("Enter the value of maximum stress (MPa) :"))
             N = float(request.form.get("N_assume_kb_case"))
@@ -513,8 +516,13 @@ def page1():
                 kb = 1.24 * pow(d, -0.107)
             else:
                 kb = 1.51 * pow(d, -0.157)
-                
-            return kb
+            
+            if kb <= assumedKb:
+                return kb
+                dia = d
+            else:
+
+                return assumedKb
 
         def determineK(Sut):
             global dia
@@ -568,12 +576,14 @@ def page1():
                 load = load.lower()
             else:
                 print("Invalid load option entered.")
+            print("dia in notch", dia)
             r = dia/2
+            print("r",r)
             if load == 'bending' or load == 'axial':
-                sqrta = 1.24 - 2.25*10E-3*Sut + 1.60*10E-5*Sut**2 - 4.11*10E-8*Sut**3 # Changed ^ to **
+                sqrta = 1.24 - 2.25*10E-3*Sut + 1.60*10E-5*Sut**2 - 4.11*10E-8*Sut**3
             else:
-                sqrta = 0.958 -1.83*10E-3*Sut + 1.43*10E-5*Sut**2 - 4.11*10E-8*Sut**3 # Changed ^ to **
-            q = 1/(1+(sqrta/math.sqrt(r))) # Variable r is not defined
+                sqrta = 0.958 -1.83*10E-3*Sut + 1.43*10E-5*Sut**2 - 4.11*10E-8*Sut**3
+            q = 1/(1+(sqrta/math.sqrt(r))) 
             
             return round(q, 2)
 
