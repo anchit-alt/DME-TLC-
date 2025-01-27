@@ -30,27 +30,27 @@ def home():
 def ball():
     if request.method == "POST":
         ###bearing type
-        if request.form.get('name') == "Ball":
-            print("Ball bearing selected")
-            a = 3
-            b = 1.483
-            X_0 = 0.02
-            theta = 4.459
-            LR = pow(10, 6)
-        elif request.form.get('name') == "Taper":
-            print("Tapered Roller Bearing selected")
-            a = 10 / 3
-            b = 1.5
-            X_0 = 0.0
-            theta = 4.48
-            LR = 90 * pow(10, 6)
-        else:
-            print("Cylinder Roller Bearing selected")
-            a = 10 / 3
-            b = 1.483
-            X_0 = 0.02
-            theta = 4.459
-            LR = pow(10, 6)
+        # if request.form.get('name') == "Ball":
+        print("Ball bearing selected")
+        a = 3
+        b = 1.483
+        X_0 = 0.02
+        theta = 4.459
+        LR = pow(10, 6)
+        # elif request.form.get('name') == "Taper":
+        #     print("Tapered Roller Bearing selected")
+        #     a = 10 / 3
+        #     b = 1.5
+        #     X_0 = 0.0
+        #     theta = 4.48
+        #     LR = 90 * pow(10, 6)
+        # else:
+        #     print("Cylinder Roller Bearing selected")
+        #     a = 10 / 3
+        #     b = 1.483
+        #     X_0 = 0.02
+        #     theta = 4.459
+        #     LR = pow(10, 6)
         inner_ring = request.form.get('ring_rotation')
         if inner_ring == "inner":
             V =1.0
@@ -77,6 +77,7 @@ def ball():
 
         table11_1 = pd.read_csv("Data/11_point_1.csv")
         table11_2 = pd.read_csv("Data/11_point_2.csv")
+
         num_rows = len(table11_1)
         num_rows_half = int(num_rows / 2)
 
@@ -154,9 +155,102 @@ def ball():
         if selected_bore:
             return f"Select bore of: {selected_bore} mm"
         else:
-            return "Unable to select a suitable bore."
+            return "Unable to select a suitable bore, possibly the diameter exceeds 95 mm"
     else:
         return render_template("ball_bearing.html")
+    
+@app.route("/cylindrical_bearing.html", methods=["POST", "GET"])
+def cylinder():
+    if request.method == "POST":
+        print("Cylinder Roller Bearing selected")
+        try:
+            a = 10 / 3
+            b = 1.483
+            X_0 = 0.02
+            theta = 4.459
+            LR = pow(10, 6)
+
+            inner_ring = request.form.get('ring_rotation')
+            if inner_ring == "inner":
+                V = 1.0
+            else:
+                V = 1.2
+
+            af = float(request.form.get('af') or 0)  # Default to 0 if not provided
+            Fa = float(request.form.get("Axial_load") or 0)
+            Fr = float(request.form.get("Radial_load") or 0)
+            ld = float(request.form.get("desired_life") or 0)
+            nd = float(request.form.get("desired_speed") or 0)
+
+            print(af, Fa, Fr, ld, nd)
+
+            def calculate_LD(ld, nd):
+                return 60 * ld * nd
+
+            def calculate_XD(LD, LR):
+                return float(LD / LR)
+
+            def calculate_Fe(V, Fr, Fa, X, Y):
+                return float((X * V * Fr) + (Y * Fa))
+
+            LD = calculate_LD(ld, nd)
+            R = float(request.form.get("desired_reliability") or 0.9)  # Default reliability
+
+            XD = calculate_XD(LD=LD, LR=LR)
+
+            # Load the required CSV files
+            table11_1 = pd.read_csv("Data/11_point_1.csv")
+            table_11_3_series_02 = pd.read_csv("Data/Cylindrical_Roller_Bearings.csv")
+            table_11_3_series_03 = pd.read_csv("Data/Cylindrical_Roller_Bearings_03_Series.csv")
+
+            num_rows = len(table11_1)
+            num_rows_half = int(num_rows / 2)
+
+            X = table11_1.loc[num_rows_half, "X2"]
+            Y = table11_1.loc[num_rows_half, "Y2"]
+            print("X and Y", X, Y)
+
+            def iteration(j, l):
+                C_ten_list = []  # To store C_10 values from the table that are greater than C_ten
+
+                while True:
+                    # Step 1: Calculate Fe
+                    Fe = calculate_Fe(V=V, Fa=Fa, Fr=Fr, X=j, Y=l)
+                    FD = Fe if Fe > Fr else Fr
+                    print("FD\n", round(FD, 2))
+
+                    # Step 2: Calculate the new C_ten
+                    C_ten = af * FD * ((XD / (X_0 + (theta - X_0) * (1 - R) ** (1 / b))) ** (1 / a))
+                    print("New C_ten\n", round(C_ten, 6))
+
+                    # Series logic
+                    series = float(request.form.get("series") or 0)
+                    series_table = table_11_3_series_02 if series == 2 else table_11_3_series_03
+
+                    for i in range(len(series_table['Load Rating C10 (kN)'])):
+                        if series_table['Load Rating C10 (kN)'][i] > C_ten:
+                            if series_table['Load Rating C10 (kN)'][i] in C_ten_list:
+                                print(f"Converged on C_10 value: {series_table['Load Rating C10 (kN)'][i]} kN")
+                                print(f"Select bore of :{series_table['Bore (mm)'][i]} mm")
+                                return series_table['Bore (mm)'][i]
+                            else:
+                                C_ten_list.append(series_table['Load Rating C10 (kN)'][i])
+                                break
+                    else:
+                        return None
+
+            selected_bore = iteration(X, Y)
+            if selected_bore:
+                return f"Select bore of: {selected_bore} mm"
+            else:
+                return "Unable to select a suitable bore, possibly the diameter exceeds 95 mm"
+        except Exception as e:
+            print(f"Error: {e}")
+            return "An error occurred during processing."
+    else:
+        return render_template("cylindrical_bearing.html")
+
+
 ###########################################################################################################################
 @app.route("/fos.html",methods = ["POST","GET"])
 def page1():
