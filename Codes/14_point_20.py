@@ -2,32 +2,32 @@ import math
 import pandas as pd
 import numpy as np
 
-type_of_gear = input("1. Spur , 2. bevel")
-pressure_angle = input("Pressure angle")
+type_of_gear = float(input("1. Spur , 2. bevel"))
+pressure_angle = float(input("Pressure angle"))
 number_of_teeth= int(input("No . of teeth in pinion "))
-Number_of_teeth_gear= input("No . of teeth in gear")
-Module = input("Enter Module")
-Transmitted_power_by_pinion = input("Transmitted_power_by_pinion (Watt)")
-Pinion_speed = input("Pinion Speed in rev/min")
-Grade = input("Grade 1 or 2")
-Face_width = input("Enter Face width (mm)")
-
-hardness_of_steel = input("Hardness of Steel in Brinel")
-Crowned_Uncrowned = input("1. Crowned / 2. Uncrowned")
+Number_of_teeth_gear= float(input("No . of teeth in gear"))
+Module = float(input("Enter Module"))
+Transmitted_power_by_pinion = float(input("Transmitted_power_by_pinion (Watt)"))
+Pinion_speed = float(input("Pinion Speed in rev/min"))
+Grade = float(input("Grade 1 or 2"))
+Face_width = float(input("Enter Face width (mm)"))
+Hbp = float(input("Hardness of pinion in Brinel"))
+Hbg = float(input("Hardness of gear in Brinel"))
+Crowned_Uncrowned = float(input("1. Crowned / 2. Uncrowned"))
 if Crowned_Uncrowned == 1:
     cmc = 0.8
 elif Crowned_Uncrowned ==2:
     cmc = 1
-Quality_standard_number = input("Quality standard number")
-Pinion_life_in_no_of_cycles = input("Enter Pinion Life in number of Cycles")
+Quality_standard_number = float(input("Quality standard number"))
+Pinion_life_in_no_of_cycles = float(input("Enter Pinion Life in number of Cycles"))
 reliability = float(input("Enter reliabilty in decimal"))
 
 pitch_dia_pinion = Module * number_of_teeth
 pitch_dia_gear = Module * Number_of_teeth_gear
 pitch_line_velocity = float((math.pi * pitch_dia_pinion * Pinion_speed)/ 60)
 load = float(Transmitted_power_by_pinion / pitch_line_velocity)
-b = 0.25(12-Quality_standard_number)**(2/3)
-A = 50 + 56(1-b)
+b = float(0.25*(12-Quality_standard_number)**(2/3))
+A = 50 + 56*(1-b)
 Kv = float((A+math.sqrt(200*pitch_line_velocity)/(A))**b)
 print("Kv", Kv)
 
@@ -74,31 +74,31 @@ elif Face_width >425 and Face_width <=1000:
     (Face_width/(10*Face_width)) - 0.1109 +8.15*pow(10,-4)*Face_width - 3.53*pow(10,-7)*Face_width**2
 
 cpm = 1 
-gear_condition = input("1. Open Gearing , 2. Commercial, 3. Precision, 4. Extraprecision")
+gear_condition = float(input("1. Open Gearing , 2. Commercial, 3. Precision, 4. Extraprecision"))
 gear_conditions = pd.read_csv("Data/corrected_gear_conditions.csv")
 
 if gear_condition == 1:
-    A_gear = gear_conditions['A'].loc[gear_conditions.index[0]]
-    B_gear = gear_conditions['B'].loc[gear_conditions.index[0]]
-    C_gear = gear_conditions['C'].loc[gear_conditions.index[0]]
+    A_gear = 0.247
+    B_gear = 0.0167
+    C_gear = -0.765 * pow (10,-4)
 elif gear_condition == 2:
-    A_gear = gear_conditions['A'].loc[gear_conditions.index[1]]
-    B_gear = gear_conditions['B'].loc[gear_conditions.index[1]]
-    C_gear = gear_conditions['C'].loc[gear_conditions.index[1]]
+    A_gear = 0.127
+    B_gear = 0.0158
+    C_gear = -0.930 * pow(10,-4)
 elif gear_condition == 3:
-    A_gear = gear_conditions['A'].loc[gear_conditions.index[2]]
-    B_gear = gear_conditions['B'].loc[gear_conditions.index[2]]
-    C_gear = gear_conditions['C'].loc[gear_conditions.index[2]]
+    A_gear = 0.0675
+    B_gear = 0.0128
+    C_gear = -0.926 * pow(10,-4)
 elif gear_condition == 4:
-    A_gear = gear_conditions['A'].loc[gear_conditions.index[3]]
-    B_gear = gear_conditions['B'].loc[gear_conditions.index[3]]
-    C_gear = gear_conditions['C'].loc[gear_conditions.index[3]]
+    A_gear = 0.00360
+    B_gear = 0.0102
+    C_gear = -0.822 * pow(10,-4)
 
 Face_width_in_inch = Face_width / 12
 
 cma = A_gear + B_gear*Face_width_in_inch + C_gear*pow(Face_width_in_inch,2)
 
-for_ce = input(" 1. bearing adjusted at assembly or compatibilty improved by lapping or bore , 2. for all other conditions")
+for_ce = float(input(" 1. bearing adjusted at assembly or compatibilty improved by lapping or bore , 2. for all other conditions"))
 if for_ce == 1:
     ce = 0.8
 elif for_ce ==2:
@@ -122,7 +122,7 @@ elif reliability >= 0.99 and reliability <= 0.9999:
 
 mn = 1
 gear_ratio = Number_of_teeth_gear/number_of_teeth
-external_or_internal_gear = input("1. External Gear, 2. Internal Gear")
+external_or_internal_gear = float(input("1. External Gear, 2. Internal Gear"))
 if external_or_internal_gear ==1:
     zi = (math.cos(pressure_angle)*math.sin(pressure_angle)*gear_ratio)/(2*mn*(gear_ratio+1))
 elif external_or_internal_gear==2:
@@ -130,3 +130,76 @@ elif external_or_internal_gear==2:
 
 Ze = 191 * math.sqrt(pow(10,6))
 
+if Grade == 1:
+    Stp = 0.553 * Hbp + 88.3 
+    Stg = 0.553 * Hbg + 88.3
+elif Grade == 2:
+    Stp = 0.703 * Hbp + 113
+    Stg = 0.703 * Hbg + 113
+
+if Grade == 1:
+    Scp = 0.568 * Hbp + 83.8
+    Scg = 0.568 * Hbg + 83.8
+elif Grade == 2:
+    Scp = 0.749 * Hbp + 110
+    Scg = 0.749 * Hbg + 110
+
+Zn = 1.4488 * pow(N,-0.023)
+
+if Hbp/Hbg <1.2:
+    Ch = 1
+
+power_source = float(input("1. Uniform, 2. Light Shock, 3. Medium Shock"))
+driven_machine = float(input("1. Uniform, 2. Moderate Shock, 3. Heavy Shock"))
+overload_factors_table = pd.read_csv("Data/overload_factors.csv")
+
+if power_source == 1:
+    if driven_machine == 1:
+        Ko =1
+    if driven_machine == 2:
+        Ko = 1.25
+    if driven_machine == 3:
+        Ko =1.75
+if power_source == 2:
+    if driven_machine == 1:
+        Ko =1.25
+    if driven_machine == 2:
+        Ko = 1.5
+    if driven_machine == 3:
+        Ko =2
+if power_source == 3:
+    if driven_machine == 1:
+        Ko =1.5
+    if driven_machine == 2:
+        Ko = 1.75
+    if driven_machine == 3:
+        Ko =2.25
+
+Kb = 1 
+Y_thetha = 1
+
+sigma_p = (load  * Ko * Kv * Ks_p * Kh * Kb)/(Face_width * Module * Yj_p)
+sigma_g= (load  * Ko * Kv * Ks_g * Kh * Kb)/(Face_width * Module * Yj_g)
+
+print("sigma pinion" , sigma_p)
+print("sigma gear" , sigma_g)
+
+Sf_p = (Stp * Yn_pinion)/(sigma_p*Y_thetha*Yz)
+Sf_g = (Stg * Yn_gear)/(sigma_g*Y_thetha*Yz)
+
+print("Sf pinion", Sf_p)
+print("Sf gear",Sf_g)
+
+#surface condition factor (Zr)
+Zr = 1
+sigma_c_p = Ze * math.sqrt((load*Ko*Kv*Ks_p*Kh*Zr)/(pitch_dia_pinion*Face_width*zi))
+sigma_c_g = Ze * math.sqrt((load*Ko*Kv*Ks_g*Kh*Zr)/(pitch_dia_gear*Face_width*zi))
+
+print("sigma_c_g", sigma_c_g)
+print("sigma_c_p",sigma_c_p)
+Zw = 1
+Sh_p = (Scp*Zn*Zw)/(sigma_c_p * Y_thetha * Yz)
+Sh_g = (Scg*Zn*Zw)/(sigma_c_g * Y_thetha * Yz)
+
+print("Sh_p",Sh_p)
+print("Sh_g",Sh_g)
