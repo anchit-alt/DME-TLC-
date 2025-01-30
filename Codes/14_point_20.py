@@ -2,25 +2,25 @@ import math
 import pandas as pd
 import numpy as np
 
-type_of_gear = float(input("1. Spur , 2. bevel"))
-pressure_angle = float(input("Pressure angle"))
+type_of_gear = float(input("1. Spur , 2. bevel "))
+pressure_angle = float(input("Pressure angle (degrees) "))
 number_of_teeth= int(input("No . of teeth in pinion "))
-Number_of_teeth_gear= float(input("No . of teeth in gear"))
-Module = float(input("Enter Module"))
-Transmitted_power_by_pinion = float(input("Transmitted_power_by_pinion (Watt)"))
-Pinion_speed = float(input("Pinion Speed in rev/min"))
-Grade = float(input("Grade 1 or 2"))
-Face_width = float(input("Enter Face width (mm)"))
-Hbp = float(input("Hardness of pinion in Brinel"))
-Hbg = float(input("Hardness of gear in Brinel"))
-Crowned_Uncrowned = float(input("1. Crowned / 2. Uncrowned"))
+Number_of_teeth_gear= float(input("No . of teeth in gear "))
+Module = float(input("Enter Module "))
+Transmitted_power_by_pinion = float(input("Transmitted_power_by_pinion (Watt) "))
+Pinion_speed = float(input("Pinion Speed in rev/min "))
+Grade = float(input("Grade 1 or 2 "))
+Face_width = float(input("Enter Face width (mm) "))
+Hbp = float(input("Hardness of pinion in Brinel "))
+Hbg = float(input("Hardness of gear in Brinel "))
+Crowned_Uncrowned = float(input("1. Crowned / 2. Uncrowned "))
 if Crowned_Uncrowned == 1:
     cmc = 0.8
 elif Crowned_Uncrowned ==2:
     cmc = 1
-Quality_standard_number = float(input("Quality standard number"))
-Pinion_life_in_no_of_cycles = float(input("Enter Pinion Life in number of Cycles"))
-reliability = float(input("Enter reliabilty in decimal"))
+Quality_standard_number = float(input("Quality standard number "))
+Pinion_life_in_no_of_cycles = float(input("Enter Pinion Life in number of Cycles "))
+reliability = float(input("Enter reliabilty in decimal "))
 
 pitch_dia_pinion = Module * number_of_teeth
 pitch_dia_gear = Module * Number_of_teeth_gear
@@ -74,7 +74,7 @@ elif Face_width >425 and Face_width <=1000:
     (Face_width/(10*Face_width)) - 0.1109 +8.15*pow(10,-4)*Face_width - 3.53*pow(10,-7)*Face_width**2
 
 cpm = 1 
-gear_condition = float(input("1. Open Gearing , 2. Commercial, 3. Precision, 4. Extraprecision"))
+gear_condition = float(input("1. Open Gearing , 2. Commercial, 3. Precision, 4. Extraprecision "))
 gear_conditions = pd.read_csv("Data/corrected_gear_conditions.csv")
 
 if gear_condition == 1:
@@ -98,7 +98,7 @@ Face_width_in_inch = Face_width / 12
 
 cma = A_gear + B_gear*Face_width_in_inch + C_gear*pow(Face_width_in_inch,2)
 
-for_ce = float(input(" 1. bearing adjusted at assembly or compatibilty improved by lapping or bore , 2. for all other conditions"))
+for_ce = float(input(" 1. bearing adjusted at assembly or compatibilty improved by lapping or bore , 2. for all other conditions "))
 if for_ce == 1:
     ce = 0.8
 elif for_ce ==2:
@@ -122,7 +122,7 @@ elif reliability >= 0.99 and reliability <= 0.9999:
 
 mn = 1
 gear_ratio = Number_of_teeth_gear/number_of_teeth
-external_or_internal_gear = float(input("1. External Gear, 2. Internal Gear"))
+external_or_internal_gear = float(input("1. External Gear, 2. Internal Gear "))
 if external_or_internal_gear ==1:
     zi = (math.cos(pressure_angle)*math.sin(pressure_angle)*gear_ratio)/(2*mn*(gear_ratio+1))
 elif external_or_internal_gear==2:
@@ -149,8 +149,8 @@ Zn = 1.4488 * pow(N,-0.023)
 if Hbp/Hbg <1.2:
     Ch = 1
 
-power_source = float(input("1. Uniform, 2. Light Shock, 3. Medium Shock"))
-driven_machine = float(input("1. Uniform, 2. Moderate Shock, 3. Heavy Shock"))
+power_source = float(input("1. Uniform, 2. Light Shock, 3. Medium Shock "))
+driven_machine = float(input("1. Uniform, 2. Moderate Shock, 3. Heavy Shock "))
 overload_factors_table = pd.read_csv("Data/overload_factors.csv")
 
 if power_source == 1:
