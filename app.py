@@ -380,14 +380,14 @@ def page1():
                 N = float(request.form.get("Number_of_cycles"))
                 if N != 0.0:
                     Sf = a*pow(N, b)
-                    print("Fatigure strength at N cycles :", Sf)
+                    print("Fatigue strength at N cycles :", Sf)
                     print("N",N)
-                    return Sf
+                    return "Fatigue Strength (MPa) : ", round(Sf,2) 
             else:
                 N = pow(sig_rev/a, 1/b)
                 print("Number of cycles to failure at reversing stress :", round(N, 2))
                 print("N",N)
-                return round(N,2)
+                return "Number of cycles to Failure :" , round(N,2)
         def combination_loading_modes():
             global Sut
             Sut = float(input("Enter the value of Sut in MPa :"))
