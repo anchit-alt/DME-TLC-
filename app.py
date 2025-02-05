@@ -25,6 +25,18 @@ def home():
     return render_template("index.html")
             # render_template("/Users/anchit/Documents/GitHub/DME-TLC-/Codes/templates/index.html")
 
+@app.route("/bearing_selection.html",methods = ["POST","GET"])
+def select():
+    if request.method == "POST":
+        axial = float(request.form.get('ax_load'))
+        radial = float(request.form.get('r_load'))
+        if axial <= 0.05*radial:
+            return render_template("cylindrical_bearing.html")
+        else:
+            return render_template("ball_bearing.html")
+    else:
+        return render_template("bearing_selection.html")
+
 
 @app.route("/ball_bearing.html",methods = ["POST","GET"])
 def ball():
@@ -207,7 +219,9 @@ def cylinder():
             num_rows_half = int(num_rows / 2)
 
             X = table11_1.loc[num_rows_half, "X2"]
-            Y = table11_1.loc[num_rows_half, "Y2"]
+            # Y = table11_1.loc[num_rows_half, "Y2"]
+            Y = 0
+            
             print("X and Y", X, Y)
 
             def iteration(j, l):
