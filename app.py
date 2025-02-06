@@ -26,6 +26,13 @@ def home():
     return render_template("index.html")
             # render_template("/Users/anchit/Documents/GitHub/DME-TLC-/Codes/templates/index.html")
 
+@app.route("/chapter_14.html",methods = ["POST","GET"])
+def chapter_14():
+    if request.method == "POST":
+        return "Hi"
+    else:
+        return render_template("chapter_14.html")
+
 @app.route("/bearing_selection.html",methods = ["POST","GET"])
 def select():
     if request.method == "POST":

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get fatigue strength</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="static/assets/css/ball_bearing.css"></link>
+    </head>
+    <body>
+    <div class="form-body">
+        <div class="row">
+            <div class="form-holder">
+                <div class="form-content">
+                    <div class="form-items">
+                        <h3>Get Fatigue Strength / Number of Cycles to Failure</h3>
+                        <p>Fill in the data below</p>
+                        <form  action="#" method="post" class="requires-validation" novalidate>
+                            <div class="col-md-12">
+                                <select name="type_of_gear" class="form-select mt-3" required>
+                                      <option selected disabled value="">SPUR / BEVEL GEAR</option>
+                                      <option value="spur">SPUR</option>
+                                      <option value="gear">GEAR</option>
+                               </select>
+                                <div class="valid-feedback">You selected a position!</div>
+                                <div class="invalid-feedback">Please select a position!</div>
+                           </div>
+                           <div class="col-md-12">
+                            <input class="form-control" type="number" name="pressure_angle" placeholder="Pressure Angle (deg)" required>
+                             <div class="valid-feedback">Email field is valid!</div>
+                             <div class="invalid-feedback">Email field cannot be blank!</div>
+                            </div>
+                            <div class="col-md-12">
+                                <input class="form-control" type="number" name="number_of_pinion" placeholder="Number of teeth in Pinion" >
+                                 <div class="valid-feedback">Email field is valid!</div>
+                                 <div class="invalid-feedback">Email field cannot be blank!</div>
+                            </div>
+                            <div class="col-md-12">
+                                <input class="form-control" type="number" name="number_of_gear" placeholder="Number of teeth in Gear" >
+                                 <div class="valid-feedback">Email field is valid!</div>
+                                 <div class="invalid-feedback">Email field cannot be blank!</div>
+                            </div>
+                            <div class="col-md-12">
+                                <input class="form-control" type="number" name="module" placeholder="Enter Module" >
+                                 <div class="valid-feedback">Email field is valid!</div>
+                                 <div class="invalid-feedback">Email field cannot be blank!</div>
+                            </div>
+                            <div class="col-md-12">
+                                <input class="form-control" type="number" name="power_by_Pinion" placeholder="Enter Power transmitted by pinion (Watt)" >
+                                 <div class="valid-feedback">Email field is valid!</div>
+                                 <div class="invalid-feedback">Email field cannot be blank!</div>
+                            </div>
+                            <div class="col-md-12">
+                                <input class="form-control" type="number" name="pinion_speed" placeholder="Enter Pinion Speed (rev/min)" >
+                                 <div class="valid-feedback">Email field is valid!</div>
+                                 <div class="invalid-feedback">Email field cannot be blank!</div>
+                            </div>
+                            <div class="col-md-12">
+                                <select name="grade" class="form-select mt-3" required>
+                                      <option selected disabled value="">Grade 1 / 2</option>
+                                      <option value="1">1</option>
+                                      <option value="2">2</option>
+                               </select>
+                                <div class="valid-feedback">You selected a position!</div>
+                                <div class="invalid-feedback">Please select a position!</div>
+                           </div>
+                           <div class="col-md-12">
+                                <input class="form-control" type="number" name="face_width" placeholder="Enter Face Width (mm)" >
+                                 <div class="valid-feedback">Email field is valid!</div>
+                                 <div class="invalid-feedback">Email field cannot be blank!</div>
+                            </div>
+                            <div class="col-md-12">
+                                <input class="form-control" type="number" name="pinion_hardness" placeholder="Enter Hardness of Pinion in Brinel" >
+                                 <div class="valid-feedback">Email field is valid!</div>
+                                 <div class="invalid-feedback">Email field cannot be blank!</div>
+                            </div>
+                            <div class="col-md-12">
+                                <input class="form-control" type="number" name="gear_hardness" placeholder="Enter Hardness of Gear in Brinel" >
+                                 <div class="valid-feedback">Email field is valid!</div>
+                                 <div class="invalid-feedback">Email field cannot be blank!</div>
+                            </div>
+                            <div class="col-md-12">
+                                <select name="crowned/uncrowned" class="form-select mt-3" required>
+                                      <option selected disabled value="">Crowned / Uncrowned</option>
+                                      <option value="crowned">Crowned</option>
+                                      <option value="uncrowned">Uncrowned</option>
+                               </select>
+                                <div class="valid-feedback">You selected a position!</div>
+                                <div class="invalid-feedback">Please select a position!</div>
+                           </div>
+                           <div class="col-md-12">
+                            <input class="form-control" type="number" name="quality_standard_number" placeholder="Enter Quality Standard Number" >
+                             <div class="valid-feedback">Email field is valid!</div>
+                             <div class="invalid-feedback">Email field cannot be blank!</div>
+                            </div>
+                            <div class="col-md-12">
+                                <input class="form-control" type="number" name="pinion_number_of_cycles" placeholder="Enter Pinion Number of Cycles" >
+                                 <div class="valid-feedback">Email field is valid!</div>
+                                 <div class="invalid-feedback">Email field cannot be blank!</div>
+                             </div>
+                             <div class="col-md-12">
+                                <input class="form-control" type="number" name="reliability" placeholder="Reliability" >
+                                 <div class="valid-feedback">Email field is valid!</div>
+                                 <div class="invalid-feedback">Email field cannot be blank!</div>
+                             </div>
+
+                            <div class="col-md-12">
+                                <select name ="gear_condition" class="form-select mt-3" required>
+                                      <option selected disabled value="">Gear Condition</option>
+                                      <option value="O">Open Gearing</option>
+                                      <option value="C">Commercial</option>
+                                      <option value="P">Precision</option>
+                                      <option value="E">Extraprecision</option>
+                               </select>
+                                <div class="valid-feedback">You selected a position!</div>
+                                <div class="invalid-feedback">Please select a position!</div>
+                           </div>
+                           <div class="col-md-12">
+                            <select name="assembly/other" class="form-select mt-3" required>
+                                  <option selected disabled value="">Adjustments</option>
+                                  <option value="assembly">bearing adjusted at assembly or compatibilty improved by lapping or bore</option>
+                                  <option value="other">for all other conditions</option>
+                           </select>
+                            <div class="valid-feedback">You selected a position!</div>
+                            <div class="invalid-feedback">Please select a position!</div>
+                       </div>
+                           <div class="col-md-12">
+                            <select name="power_source" class="form-select mt-3" required>
+                                  <option selected disabled value="">Power Source</option>
+                                  <option value="U">Uniform</option>
+                                  <option value="LS">Light Shock</option>
+                                  <option value="MS">Medium Shock</option>
+                           </select>
+                            <div class="valid-feedback">You selected a position!</div>
+                            <div class="invalid-feedback">Please select a position!</div>
+                           </div>
+                           <div class="col-md-12">
+                            <select name="power_source" class="form-select mt-3" required>
+                                  <option selected disabled value="">Driven Machine</option>
+                                  <option value="U">Uniform</option>
+                                  <option value="ModS">Moderate Shock</option>
+                                  <option value="HS">Heavy Shock</option>
+                           </select>
+                            <div class="valid-feedback">You selected a position!</div>
+                            <div class="invalid-feedback">Please select a position!</div>
+                           </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
+                          <label class="form-check-label">I confirm that all data are correct</label>
+                         <div class="invalid-feedback">Please confirm that the entered data are all correct!</div>
+                        </div> 
+                  
+
+                            <div class="form-button mt-3">
+                                <button id="submit" type="submit" class="btn btn-primary">Enter</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+</body>
+</html>
