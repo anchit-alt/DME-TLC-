@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+from flask import redirect, url_for
 import cv2
 import csv
 import os
@@ -31,15 +32,15 @@ def select():
         axial = float(request.form.get('ax_load'))
         radial = float(request.form.get('r_load'))
         if axial <= 0.05*radial:
-            return render_template("cylindrical_bearing.html")
+            return redirect(url_for('cylindrical_bearing'))
         else:
-            return render_template("ball_bearing.html")
+            return redirect(url_for('ball_bearing'))
     else:
         return render_template("bearing_selection.html")
 
 
 @app.route("/ball_bearing.html",methods = ["POST","GET"])
-def ball():
+def ball_bearing():
     if request.method == "POST":
         ###bearing type
         # if request.form.get('name') == "Ball":
@@ -172,7 +173,7 @@ def ball():
         return render_template("ball_bearing.html")
     
 @app.route("/cylindrical_bearing.html", methods=["POST", "GET"])
-def cylinder():
+def cylindrical_bearing():
     if request.method == "POST":
         print("Cylinder Roller Bearing selected")
         try:
