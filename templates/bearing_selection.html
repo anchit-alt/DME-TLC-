@@ -46,10 +46,10 @@
     <form action="{{ url_for('select') }}" method="POST">
         <p>If Axial load is less than 5 % of Radial load , choose Cylindrical Bearing</p>
         <p>Enter loads , you will be redirected directly</p>
-        <label for="name">Axial Load (N)</label>
+        <label for="name">Axial Load (KN)</label>
         <input type="number"  name="ax_load" step="any" required>
         <br>
-        <label for="email">Radial Load (N)</label>
+        <label for="email">Radial Load (KN)</label>
         <input type="number"  name="r_load" step="any" required>
         <br>
         <button type="submit">Submit</button>

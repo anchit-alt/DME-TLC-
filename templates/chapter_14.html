@@ -13,7 +13,7 @@
             <div class="form-holder">
                 <div class="form-content">
                     <div class="form-items">
-                        <h3>Get Fatigue Strength / Number of Cycles to Failure</h3>
+                        <h3>SPUR and BEVEL Gear</h3>
                         <p>Fill in the data below</p>
                         <form  action="#" method="post" class="requires-validation" novalidate>
                             <div class="col-md-12">
@@ -124,6 +124,15 @@
                             <div class="valid-feedback">You selected a position!</div>
                             <div class="invalid-feedback">Please select a position!</div>
                        </div>
+                       <div class="col-md-12">
+                        <select name="external/internal" class="form-select mt-3" required>
+                              <option selected disabled value="">External / Internal Gear</option>
+                              <option value="external">External Gear</option>
+                              <option value="internal">Internal Gear</option>
+                       </select>
+                        <div class="valid-feedback">You selected a position!</div>
+                        <div class="invalid-feedback">Please select a position!</div>
+                   </div>
                            <div class="col-md-12">
                             <select name="power_source" class="form-select mt-3" required>
                                   <option selected disabled value="">Power Source</option>
@@ -135,7 +144,7 @@
                             <div class="invalid-feedback">Please select a position!</div>
                            </div>
                            <div class="col-md-12">
-                            <select name="power_source" class="form-select mt-3" required>
+                            <select name="driven_machine" class="form-select mt-3" required>
                                   <option selected disabled value="">Driven Machine</option>
                                   <option value="U">Uniform</option>
                                   <option value="ModS">Moderate Shock</option>
