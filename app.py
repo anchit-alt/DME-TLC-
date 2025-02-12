@@ -230,9 +230,67 @@ def chapter_14():
 
         print("Sh_p",Sh_p)
         print("Sh_g",Sh_g)
-        return f'''<p> sigma_c_g: {round(sigma_c_g,3)} MPa</p><br><p>sigma_c_p: {round(sigma_c_p,3)} MPa</p><br><p>Sh_p: {round(Sh_p,9)}</p><br><p>Sh_g: {round(Sh_g,9)}</p><br><p>Sigma Pinion: {round(sigma_p,9)} MPa</p><br><p>Sigma gear: {round(sigma_g,3)} MPa</p><br><p>Sf_p: {round(Sf_p,3)}</p><br><p>Sf_g: {round(Sf_g,3)}</p>
-            <a href="/"><button>Return to Home</button></a>
-            '''
+
+        return f'''
+    <style>
+        table {{
+            width: 50%;
+            border-collapse: collapse;
+            margin: 20px auto;
+            background: white;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }}
+        th, td {{
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }}
+        th {{
+            background: #007BFF;
+            color: white;
+        }}
+        tr:hover {{
+            background-color: #f1f1f1;
+        }}
+        button {{
+            display: block;
+            margin: 20px auto;
+            padding: 10px 15px;
+            font-size: 16px;
+            color: white;
+            background: #007BFF;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }}
+        button:hover {{
+            background: #0056b3;
+        }}
+    </style>
+
+    <table>
+        <tr>
+            <th>Parameter</th>
+            <th>Value</th>
+        </tr>
+        <tr><td>σ<sub>c_g</sub> (MPa)</td><td>{round(sigma_c_g,3)}</td></tr>
+        <tr><td>σ<sub>c_p</sub> (MPa)</td><td>{round(sigma_c_p,3)}</td></tr>
+        <tr><td>Sh<sub>p</sub></td><td>{round(Sh_p,9)}</td></tr>
+        <tr><td>Sh<sub>g</sub></td><td>{round(Sh_g,9)}</td></tr>
+        <tr><td>σ<sub>p</sub> (MPa)</td><td>{round(sigma_p,9)}</td></tr>
+        <tr><td>σ<sub>g</sub> (MPa)</td><td>{round(sigma_g,3)}</td></tr>
+        <tr><td>Sf<sub>p</sub></td><td>{round(Sf_p,3)}</td></tr>
+        <tr><td>Sf<sub>g</sub></td><td>{round(Sf_g,3)}</td></tr>
+    </table>
+
+    <a href="/"><button>Return to Home</button></a>
+'''     
+        # return f'''<p> sigma_c_g: {round(sigma_c_g,3)} MPa</p><br><p>sigma_c_p: {round(sigma_c_p,3)} MPa</p><br><p>Sh_p: {round(Sh_p,9)}</p><br><p>Sh_g: {round(Sh_g,9)}</p><br><p>Sigma Pinion: {round(sigma_p,9)} MPa</p><br><p>Sigma gear: {round(sigma_g,3)} MPa</p><br><p>Sf_p: {round(Sf_p,3)}</p><br><p>Sf_g: {round(Sf_g,3)}</p>
+        #     <a href="/"><button>Return to Home</button></a>
+        #     '''
     else:
         return render_template("chapter_14.html")
 
@@ -382,9 +440,52 @@ def ball_bearing():
         # iteration(X,Y)
         selected_bore = iteration(X,Y)
         if selected_bore:
-            return f'''<p>Select bore of: {selected_bore} mm</p>
-            <a href="/"><button>Return to Home</button></a>
-            '''
+            return f'''
+    <style>
+        body {{
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }}
+        .container {{
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }}
+        p {{
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }}
+        button {{
+            margin-top: 15px;
+            padding: 10px 15px;
+            font-size: 16px;
+            color: white;
+            background: #007BFF;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }}
+        button:hover {{
+            background: #0056b3;
+        }}
+    </style>
+
+    <div class="container">
+        <p>Bore Selection: <span style="color: #007BFF;">{selected_bore} mm</span></p>
+        <a href="/"><button>Return to Home</button></a>
+    </div>
+'''
+            # return f'''<p>Select bore of: {selected_bore} mm</p>
+            # <a href="/"><button>Return to Home</button></a>
+            # '''
         else:
             return "Unable to select a suitable bore, possibly the diameter exceeds 95 mm"
     else:
@@ -480,9 +581,54 @@ def cylindrical_bearing():
 
             selected_bore = iteration(X, Y)
             if selected_bore:
-                return f'''<p>Select bore of: {selected_bore} mm</p>
-            <a href="/"><button>Return to Home</button></a>
-            '''
+                return f'''
+    <style>
+        body {{
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }}
+        .container {{
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }}
+        p {{
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }}
+        button {{
+            margin-top: 15px;
+            padding: 10px 15px;
+            font-size: 16px;
+            color: white;
+            background: #007BFF;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }}
+        button:hover {{
+            background: #0056b3;
+        }}
+    </style>
+
+    <div class="container">
+        <p>Bore Selection: <span style="color: #007BFF;">{selected_bore} mm</span></p>
+        <a href="/"><button>Return to Home</button></a>
+    </div>
+'''
+
+
+            #     return f'''<p>Select bore of: {selected_bore} mm</p>
+            # <a href="/"><button>Return to Home</button></a>
+            # '''
             else:
                 return "Unable to select a suitable bore, possibly the diameter exceeds 95 mm"
         except Exception as e:
