@@ -57,11 +57,11 @@ def chapter_14():
             cmc = 1
         pitch_dia_pinion = Module * number_of_teeth
         pitch_dia_gear = Module * Number_of_teeth_gear
-        pitch_line_velocity = float((math.pi * pitch_dia_pinion * Pinion_speed)/ 60)
+        pitch_line_velocity = float((math.pi * ((pitch_dia_pinion)*pow(10,-3)) * Pinion_speed)/ 60)
         load = float(Transmitted_power_by_pinion / pitch_line_velocity)
         b = float(0.25*(12-Quality_standard_number)**(2/3))
         A = 50 + 56*(1-b)
-        Kv = float((A+math.sqrt(200*pitch_line_velocity)/(A))**b)
+        Kv = float(((A+math.sqrt(200*pitch_line_velocity))/A)**b)
         data = pd.read_csv("Data/teeth_vs_y.csv")
         data['Number_of_Teeth'] = pd.to_numeric(data['Number_of_Teeth'])
         data['Y'] = pd.to_numeric(data['Y'])
@@ -86,15 +86,17 @@ def chapter_14():
 
         interpolated_y_pinion = interpolate_y(number_of_teeth, data)
         print(f"Interpolated Y for {number_of_teeth} teeth: {interpolated_y_pinion}")
-
+        gear_ratio = float(Number_of_teeth_gear/number_of_teeth)
         number_of_teeth = Number_of_teeth_gear
         interpolated_y_gear = interpolate_y(number_of_teeth,data)
         print(f"Interpolated Y for {number_of_teeth} teeth: {interpolated_y_gear}")
 
 
 
-        Ks_p = 0.8433 * (Module * Face_width * math.sqrt(interpolated_y_pinion)**0.0535)
-        Ks_g = 0.8433 * (Module * Face_width * math.sqrt(interpolated_y_gear)**0.0535)
+        Ks_p = 0.8433 * ((Module * Face_width * math.sqrt(interpolated_y_pinion))**0.0535)
+        Ks_g = 0.8433 * ((Module * Face_width * math.sqrt(interpolated_y_gear))**0.0535)
+
+        print("Ks_p,Ks_g",Ks_p,Ks_g)
 
         if Face_width <=25:
             cpf = (Face_width/(10*pitch_dia_pinion)) - 0.025 
@@ -102,7 +104,7 @@ def chapter_14():
             (Face_width/(10*pitch_dia_pinion)) - 0.0375 +4.92*pow(10,-4)*Face_width
         elif Face_width >425 and Face_width <=1000:
             (Face_width/(10*Face_width)) - 0.1109 +8.15*pow(10,-4)*Face_width - 3.53*pow(10,-7)*Face_width**2
-
+        print("cpf",cpf)
         cpm = 1 
         gear_conditions = pd.read_csv("Data/corrected_gear_conditions.csv")
         if gear_condition == "O":
@@ -122,19 +124,25 @@ def chapter_14():
             B_gear = 0.0102
             C_gear = -0.822 * pow(10,-4)
 
-        Face_width_in_inch = Face_width / 12
-
+        Face_width_in_inch = Face_width / 25.4
+        print("Face_width_in_inch",Face_width_in_inch)
+        print("A_gear,B_gear,C_gear",A_gear,B_gear,C_gear)
         cma = A_gear + B_gear*Face_width_in_inch + C_gear*pow(Face_width_in_inch,2)
 
+
+        print("cma",cma)
         if for_ce == "assembly":
             ce = 0.8
         elif for_ce =="other":
             ce =1 
         Kh = 1 + cmc * (cpf*cpm + cma * ce)
-
+        print("cmc,cma,cpm,cpf,ce",cmc,cma,cpm,cpf,ce)
+        print("Kh",Kh)
         N = Pinion_life_in_no_of_cycles
-        Yn_pinion = 1.3388 * pow(N,-0.0178)
-        Yn_gear = 1.388 * pow((N / (Number_of_teeth_gear/number_of_teeth)),-0.0178)
+        Yn_pinion = 1.3558 * pow(N,-0.0178)
+        Yn_gear = 1.3558 * pow((N / (Number_of_teeth_gear/number_of_teeth)),-0.0178)
+
+        print("Yn_pinion,Yn_gear",Yn_pinion,Yn_gear)
         ################################
         Yj_p = 0.33
         Yj_g = 0.38 
@@ -145,14 +153,19 @@ def chapter_14():
             Yz = 0.50 - 0.109*math.log(1-reliability)
 
         mn = 1
-        gear_ratio = float(Number_of_teeth_gear/number_of_teeth)
+        
 
         if external_or_internal_gear =="external":
-            zi = (math.cos(pressure_angle)*math.sin(pressure_angle)*gear_ratio)/(2*mn*(gear_ratio+1))
+            
+            a = math.cos(math.radians(pressure_angle))*math.sin(math.radians(pressure_angle))*gear_ratio
+            b = 2*mn*(gear_ratio+1)
+            zi = a/b
         elif external_or_internal_gear=="internal":
             zi = (math.cos(pressure_angle)*math.sin(pressure_angle)*gear_ratio)/(2*mn*(gear_ratio-1))
-        Ze = 191 * math.sqrt(pow(10,6))
-
+        Ze = (191 * math.sqrt(pow(10,6)))/1000
+        print("Ze",Ze)
+        print("pressure_angle,gear_ratio,mn",pressure_angle,gear_ratio,mn)
+        print("zi",zi)
         if Grade == "1":
             Stp = 0.553 * Hbp + 88.3 
             Stg = 0.553 * Hbg + 88.3
@@ -161,11 +174,11 @@ def chapter_14():
             Stg = 0.703 * Hbg + 113
 
         if Grade == "1":
-            Scp = 0.568 * Hbp + 83.8
-            Scg = 0.568 * Hbg + 83.8
+            Scp = 2.22 * Hbp + 200
+            Scg = 2.22 * Hbg + 200
         elif Grade == "2":
-            Scp = 0.749 * Hbp + 110
-            Scg = 0.749 * Hbg + 110
+            Scp = 2.41 * Hbp + 237
+            Scg = 2.41 * Hbg + 237
 
         Zn = 1.4488 * pow(N,-0.023)
         if float(Hbp/Hbg) <1.2:
@@ -202,17 +215,21 @@ def chapter_14():
         Sf_g = (Stg * Yn_gear)/(sigma_g*Y_thetha*Yz)
         Zr = 1
         sigma_c_p = Ze * math.sqrt((load*Ko*Kv*Ks_p*Kh*Zr)/(pitch_dia_pinion*Face_width*zi))
-        sigma_c_g = Ze * math.sqrt((load*Ko*Kv*Ks_g*Kh*Zr)/(pitch_dia_gear*Face_width*zi))
+        print("load,Ko,Kv,A,b,Ks_p,Kh,Zr,pitch_dia_pinion,Face_width,zi",load,Ko,Kv,A,b,Ks_p,Kh,Zr,pitch_dia_pinion,Face_width,zi)
+        print("pitch_line_velocity",pitch_line_velocity)
+        # sigma_c_g = Ze * math.sqrt((load*Ko*Kv*Ks_g*Kh*Zr)/(pitch_dia_gear*Face_width*zi))
+        sigma_c_g = math.sqrt(Ks_g/Ks_p) * sigma_c_p
 
         print("sigma_c_g", sigma_c_g)
         print("sigma_c_p",sigma_c_p)
         Zw = 1
+        print("Scp,Zn,Zw,Y_thetha,Yz",Scp,Zn,Zw,Y_thetha,Yz)
         Sh_p = (Scp*Zn*Zw)/(sigma_c_p * Y_thetha * Yz)
         Sh_g = (Scg*Zn*Zw)/(sigma_c_g * Y_thetha * Yz)
 
         print("Sh_p",Sh_p)
         print("Sh_g",Sh_g)
-        return f'''<p> sigma_c_g: {round(sigma_c_g,3)}</p><br><p>igma_c_p: {round(sigma_c_p,3)}</p><br><p>Sh_p: {round(Sh_p,9)}</p><br><p>Sh_g: {round(Sh_g,9)}</p><br><p>Sigma Pinion: {round(sigma_p,9)}</p><br><p>Sigma gear: {round(sigma_g,3)}</p><br><p>Sf_p: {round(Sf_p,3)}</p><br><p>Sf_g: {round(Sf_g,3)}</p>
+        return f'''<p> sigma_c_g: {round(sigma_c_g,3)} MPa</p><br><p>sigma_c_p: {round(sigma_c_p,3)} MPa</p><br><p>Sh_p: {round(Sh_p,9)}</p><br><p>Sh_g: {round(Sh_g,9)}</p><br><p>Sigma Pinion: {round(sigma_p,9)} MPa</p><br><p>Sigma gear: {round(sigma_g,3)} MPa</p><br><p>Sf_p: {round(Sf_p,3)}</p><br><p>Sf_g: {round(Sf_g,3)}</p>
             <a href="/"><button>Return to Home</button></a>
             '''
     else:
