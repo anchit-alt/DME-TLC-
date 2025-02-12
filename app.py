@@ -156,12 +156,13 @@ def chapter_14():
         
 
         if external_or_internal_gear =="external":
-            
             a = math.cos(math.radians(pressure_angle))*math.sin(math.radians(pressure_angle))*gear_ratio
             b = 2*mn*(gear_ratio+1)
             zi = a/b
         elif external_or_internal_gear=="internal":
-            zi = (math.cos(pressure_angle)*math.sin(pressure_angle)*gear_ratio)/(2*mn*(gear_ratio-1))
+            a = math.cos(math.radians(pressure_angle))*math.sin(math.radians(pressure_angle))*gear_ratio
+            b = 2*mn*(gear_ratio-1)
+            zi = a/b
         Ze = (191 * math.sqrt(pow(10,6)))/1000
         print("Ze",Ze)
         print("pressure_angle,gear_ratio,mn",pressure_angle,gear_ratio,mn)
