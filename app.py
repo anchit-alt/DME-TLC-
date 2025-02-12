@@ -1,9 +1,9 @@
-from bs4 import BeautifulSoup
+# from bs4 import BeautifulSoup
 from flask import redirect, url_for
 import cv2
 import csv
-import os
-import lxml
+# import os
+# import lxml
 import math
 from sympy import *
 from sympy import symbols, solve
