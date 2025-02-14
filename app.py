@@ -28,6 +28,175 @@ def home():
     return render_template("index.html")
             # render_template("/Users/anchit/Documents/GitHub/DME-TLC-/Codes/templates/index.html")
 
+@app.route("/fos_design.html",methods = ["POST","GET"])
+def fos_design():
+    if request.method == "POST":
+        rod_length = float(request.form.get("rod"))
+        load = float(request.form.get("load"))
+        N = float(request.form.get("N"))
+        design_factor = float(request.form.get("design_factor"))
+        Sut = float(request.form.get("Sut"))
+        if Sut <= 1400:
+            Se_ = 0.5 * Sut
+        else:
+            Se_ = 700
+        Sy = float(request.form.get("Sy"))
+        surfacefinish = request.form.get("surface_finish")
+        if surfacefinish == 'G':
+            a = 1.58
+            b = -0.085
+        elif surfacefinish == 'M' or surfacefinish == 'COLD':
+            a = 4.51
+            b = -0.265
+        elif surfacefinish == 'HR':
+            a = 57.7
+            b = -0.718
+        elif surfacefinish == 'AS':
+            a = 272
+            b = -0.995
+
+        ka = a * pow(Sut, b)
+        print("ka",ka)
+        assumdkb = float(request.form.get("Kb"))
+
+        loadoption = request.form.get("loading_option_1")
+            
+        if loadoption == 'bending':
+            kc = 1
+        elif loadoption == 'torsion':
+            # kb =1
+            kc = 0.59
+        elif loadoption == 'axial':
+            kc = 0.85
+            kb=1
+        kd = 1
+        reliability = float(request.form.get("desired_reliability"))
+        if reliability == 0:
+            ke = 1
+        else:
+            reliability_values = {50: 1.000, 90: 0.897, 95: 0.868, 99: 0.814, 99.9: 0.753, 99.99: 0.702, 99.999: 0.659, 99.9999: 0.620}
+            ke = reliability_values.get(reliability, 1)  # Default to 1 if reliability value not in the dictionary
+
+        kf = 1 ##misc factor 
+        Se = ka * assumdkb * kc * kd * ke * kf * Se_
+        print("Se",Se)
+        f = 1.06 - 4.1 * pow(10,-4) * Sut + 1.5 * pow(10,-7) * pow(Sut,2)
+        print("f",f)
+        a = (pow((f*Sut),2) / Se)
+        b = (- math.log10(f*Sut/Se))/3
+
+        print("a,b",a,b)
+        Sf = a * pow(N,b)
+
+        print("Sf",Sf)
+
+        Mmax = load * pow(10,3) * rod_length
+
+
+        B = pow(((6*Mmax*design_factor)/(Sf * pow(10,6))),0.33333)
+
+        B = B * 1000
+        print("B",B)
+        d_e = 0.808 * B 
+
+        print("d_e",d_e)
+        if 2.79 <= d_e and d_e <= 51 and loadoption != '3':
+            kb = 1.24 * pow(d_e, -0.107)
+            return f'''
+    <style>
+        body {{
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }}
+        .container {{
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }}
+        p {{
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }}
+        button {{
+            margin-top: 15px;
+            padding: 10px 15px;
+            font-size: 16px;
+            color: white;
+            background: #007BFF;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }}
+        button:hover {{
+            background: #0056b3;
+        }}
+    </style>
+
+    <div class="container">
+        <p>Kb: <span style="color: #007BFF;">{round(kb,2)} </span></p>
+        <a href="/fos_design.html"><button>Back</button></a>
+        <a href="/"><button>Return to Home</button></a>
+    </div>
+'''
+            
+        elif 51 <= d_e and d_e <=254:
+            kb = 1.51 * pow(d_e, -0.157)
+            return f'''
+    <style>
+        body {{
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }}
+        .container {{
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }}
+        p {{
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }}
+        button {{
+            margin-top: 15px;
+            padding: 10px 15px;
+            font-size: 16px;
+            color: white;
+            background: #007BFF;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }}
+        button:hover {{
+            background: #0056b3;
+        }}
+    </style>
+
+    <div class="container">
+        <p>Kb: <span style="color: #007BFF;">{round(kb,2)} </span></p>
+        <a href="/fos_design.html"><button>Back</button></a>
+        <a href="/"><button>Return to Home</button></a>
+    </div>
+'''
+
+    else:
+        return render_template("fos_design.html")
+
 @app.route("/chapter_14.html",methods = ["POST","GET"])
 def chapter_14():
     if request.method == "POST":
@@ -286,6 +455,7 @@ def chapter_14():
         <tr><td>Sf<sub>g</sub></td><td>{round(Sf_g,3)}</td></tr>
     </table>
 
+    <a href="/chapter_14.html"><button>Back</button></a>
     <a href="/"><button>Return to Home</button></a>
 '''     
         # return f'''<p> sigma_c_g: {round(sigma_c_g,3)} MPa</p><br><p>sigma_c_p: {round(sigma_c_p,3)} MPa</p><br><p>Sh_p: {round(Sh_p,9)}</p><br><p>Sh_g: {round(Sh_g,9)}</p><br><p>Sigma Pinion: {round(sigma_p,9)} MPa</p><br><p>Sigma gear: {round(sigma_g,3)} MPa</p><br><p>Sf_p: {round(Sf_p,3)}</p><br><p>Sf_g: {round(Sf_g,3)}</p>
@@ -480,6 +650,7 @@ def ball_bearing():
 
     <div class="container">
         <p>Bore Selection: <span style="color: #007BFF;">{selected_bore} mm</span></p>
+        <a href="/ball_bearing.html"><button>Back</button></a>
         <a href="/"><button>Return to Home</button></a>
     </div>
 '''
@@ -621,8 +792,9 @@ def cylindrical_bearing():
 
     <div class="container">
         <p>Bore Selection: <span style="color: #007BFF;">{selected_bore} mm</span></p>
+        <a href="/cylindrical_bearing.html"><button>Back</button></a>
         <a href="/"><button>Return to Home</button></a>
-    </div>
+    </div>s
 '''
 
 
