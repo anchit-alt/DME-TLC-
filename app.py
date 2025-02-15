@@ -270,9 +270,9 @@ def chapter_14():
         if Face_width <=25:
             cpf = (Face_width/(10*pitch_dia_pinion)) - 0.025 
         elif Face_width > 25 and Face_width <=425:
-            (Face_width/(10*pitch_dia_pinion)) - 0.0375 +4.92*pow(10,-4)*Face_width
+            cpf = (Face_width/(10*pitch_dia_pinion)) - 0.0375 +4.92*pow(10,-4)*Face_width
         elif Face_width >425 and Face_width <=1000:
-            (Face_width/(10*Face_width)) - 0.1109 +8.15*pow(10,-4)*Face_width - 3.53*pow(10,-7)*Face_width**2
+            cpf = (Face_width/(10*Face_width)) - 0.1109 +8.15*pow(10,-4)*Face_width - 3.53*pow(10,-7)*Face_width**2
         print("cpf",cpf)
         cpm = 1 
         gear_conditions = pd.read_csv("Data/corrected_gear_conditions.csv")
