@@ -119,36 +119,136 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 
 
-# Load an image
-img_12_16 = Image.open(r"/Users/anchit/Documents/GitHub/DME-TLC-/Images/12_16.png")
-img_12_16.show()
 
-hnot_by_c = float(input("Enter the value of ho / c "))
+if l_by_d >= 0.5 and l_by_d <=1:
+    if S <=0.15:
+        if S <=0.04:
+            a = 2.7258
+            b1 = 0.83621
+            b2 = 0.75101
+            b3 = 0.08113
+        elif S> 0.04:
+            a = 1.7176
+            b1 = 1.0478
+            b2 = 0.4999
+            b3 = 0.1868
+    elif S >0.15:
+        if S <= 1:
+            a = 0.91437
+            b1 = 0.4538
+            b2 = 0.6119
+            b3 = -0.2840
+        elif S >1:
+            a = 0.89574
+            b1 = 0.3895
+            b2 = 0.3076
+            b3 = -0.2537
+elif l_by_d >= 0.25 and l_by_d < 0.5:
+    if S <=0.15:
+        if S <=0.04:
+            a = 9.2341
+            b1 = 2.0673
+            b2 = 0.4286
+            b3 = 0.9247
+        elif S> 0.04:
+            a = 1.1545
+            b1 = 0.4637
+            b2 = 0.7851
+            b3 = -0.3788
+    elif S >0.15:
+        if S <= 1:
+            a = 1.1674
+            b1 = 0.80824
+            b2 = 0.48016
+            b3 = -0.02463
+        elif S >1:
+            a = 1.1263
+            b1 = 0.7279
+            b2 = 0.5117
+            b3 = -0.6581
+        
+hnot_by_c = a * pow(l_by_d,b1) * pow (S, (b2 + b3 * l_by_d ))
+
+
+
+
 
 ho = hnot_by_c * cmin
 
 print("ho ",ho)
 
-img_12_18 = Image.open(r"/Users/anchit/Documents/GitHub/DME-TLC-/Images/12_18.png")
-img_12_18.show()
+
+if l_by_d >= 0.5 and l_by_d <=1:
+    if S <=0.15:
+        a = 9.4533
+        b1 = -0.4758
+        b2 = 0.6705
+        b3 = -0.1124
+    elif S >0.15:
+        a = 3.5251
+        b1 = -0.2333
+        b2 = -0.1926
+        b3 = 0.1149
+
+if l_by_d >= 0.25 and l_by_d <0.5:
+    if S <=0.15:
+        a = 9.4896
+        b1 = -0.5446
+        b2 = 0.7290
+        b3 = -0.2293
+    elif S >0.15:
+        a = 17.1869
+        b1 = -0.3133
+        b2 = 0.7993
+        b3 = 0.2887
+
+rfbyc = a * pow(l_by_d,b1) * pow (S, (b2 + b3 * l_by_d ))
+
+# img_12_18 = Image.open(r"/Users/anchit/Documents/GitHub/DME-TLC-/Images/12_18.png")
+# img_12_18.show()
 
 
-rfbyc = float(input("Enter the value of r * f / c "))
+# rfbyc = float(input("Enter the value of r * f / c "))
 f = rfbyc * cmin / r
 
 print("f ",f)
 
+if l_by_d >= 0.5 and l_by_d <=1:
+    if S <=0.15:
+        a = 0.74567
+        b1 = 0.59651
+        b2 = 0.25659
+        b3 = 0.04321
+    elif S >0.15:
+        a = 0.52529
+        b1 = 0.2986
+        b2 = 0.2335
+        b3 = -0.1579
 
-img_12_21 = Image.open(r"/Users/anchit/Documents/GitHub/DME-TLC-/Images/12_21.png")
-img_12_21.show()
+if l_by_d >= 0.25 and l_by_d <0.5:
+    if S <=0.15:
+        a = 0.78635
+        b1 = 0.57452
+        b2 = 0.23670
+        b3 = 0.0840
+    elif S >0.15:
+        a = 0.64927
+        b1 = 0.5037
+        b2 = 0.2783
+        b3 = -0.3536
 
-p_by_pmax = float(input("Enter the value of p / pmax "))
+p_by_pmax = a * pow(l_by_d,b1) * pow (S, (b2 + b3 * l_by_d ))
+
+# img_12_21 = Image.open(r"/Users/anchit/Documents/GitHub/DME-TLC-/Images/12_21.png")
+# img_12_21.show()
+
+# p_by_pmax = float(input("Enter the value of p / pmax "))
 pmax = P / p_by_pmax
 
 print("pmax " , pmax)
 
-T = f * W * r 
-H_loss = 2 * math.pi * T * N
+T = f * W * r * pow ( 10, -3)
+H_loss = 2 * math.pi * T * N * pow ( 10, -3)
 
 
 
@@ -157,3 +257,8 @@ print("H_loss ",H_loss)
 
 
 
+# # Load an image
+# img_12_16 = Image.open(r"/Users/anchit/Documents/GitHub/DME-TLC-/Images/12_16.png")
+# img_12_16.show()
+
+# hnot_by_c = float(input("Enter the value of ho / c "))
