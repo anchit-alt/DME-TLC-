@@ -112,7 +112,7 @@ print("mue ", mue)
 
 
 
-S = (((r_by_c)**2)*(mue*N/P)) * pow(10,-12)
+S = (((r_by_c)**2) *  (mue*pow(10,-3)) *  ((N)/ (pow(10,6) *P)) ) * pow(10,-2)
 print("Sommerfield Number ", S)
 
 import matplotlib.pyplot as plt
