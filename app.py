@@ -244,10 +244,22 @@ def chapter12():
 
         print("Torque ", T)
         print("H_loss ",H_loss)
-
-        
-
-        return H_loss
+        return f"""
+            <style>
+                body {{ font-family: Arial, sans-serif; text-align: center; padding: 20px; }}
+                .result-container {{ background-color: #f8f9fa; padding: 20px; border-radius: 10px; width: 50%; margin: auto; box-shadow: 2px 2px 10px #ccc; }}
+                h2 {{ color: #007bff; }}
+                p {{ font-size: 18px; font-weight: bold; }}
+            </style>
+            <div class='result-container'>
+                <h2>Results:</h2>
+                <p><strong>Heat Loss (H_loss):</strong> {H_loss:.3f} W</p>
+                <p><strong>Torque (T):</strong> {T:.3f} Nm</p>
+                <p><strong>Maximum Pressure (pmax):</strong> {pmax:.3f} MPa</p>
+                <a href="/chapter12.html"><button>Back</button></a>
+                <a href="/"><button>Return to Home</button></a>
+            </div>
+        """
     else:
         return render_template("chapter12.html")
 
