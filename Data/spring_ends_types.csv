@@ -1,0 +1,6 @@
+Term,Plain,Plain and Ground,Squared or Closed,Squared and Ground
+"End coils, Nc",0,1,2,2
+"Total coils, Nt",Na,Na + 1,Na + 2,Na + 2
+"Free length, L0",pNa + d,p(Na + 1),pNa + 3d,pNa + 2d
+"Solid length, Ls",d(Na + 1),dNa,d(Na + 1),dNa
+"Pitch, p",(L0 - d)/Na,L0/(Na + 1),(L0 - 3d)/Na,(L0 - 2d)/Na
