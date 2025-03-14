@@ -18,7 +18,7 @@ e_gpa = None
 g_gpa = None
 # Ask the user for material name and diameter
 diameter = float(input("Enter the wire diameter (mm): "))
-diameter = diameter / 25.4
+d = diameter / 25.4
 user_input = input("Enter the material name: ")
 
 
@@ -33,7 +33,7 @@ else:
     for i, row in material_data.iterrows():
         try:
             d_min, d_max = map(float, row['Diameter (in)'].split('-'))
-            if d_min <= diameter <= d_max:
+            if d_min <= d <= d_max:
                 matched_rows.append(row)
         except ValueError:
             continue
@@ -92,18 +92,18 @@ filtered_data = data_2[data_2['Material'].str.contains(material_name, case=False
 
 matching_row = None
 for _, row in filtered_data.iterrows():
-    if is_diameter_in_range(row['Diameter d (in)'], diameter):
+    if is_diameter_in_range(row['Diameter d (in)'], d):
         matching_row = row
         break
 
 if matching_row is not None:
     e_gpa = matching_row['E (GPa)']
     g_gpa = matching_row['G (GPa)']
-    print(f"For material: {material_name} and diameter {diameter} in")
+    print(f"For material: {material_name} and diameter {d} in")
     print(f"E (GPa): {e_gpa}")
     print(f"G (GPa): {g_gpa}")
 else:
-    print(f"No matching entry found for material: {material_name} with diameter {diameter} in")
+    print(f"No matching entry found for material: {material_name} with diameter {d} in")
 
 design_factor = float(input("Enter design factor ns(d) "))
 robus_linearity = float(input("Enter Robust linearity "))
@@ -137,7 +137,7 @@ print("OD",OD)
 ID = D - diameter
 print("ID",ID)
 
-Na = (g_gpa * pow(diameter,4) * ymax) / (8 * pow(D,3)*fmax)
+Na = ((g_gpa * pow(diameter,4) * ymax) / (8 * pow(D,3)*fmax)) * pow(10,3)
 print("Na",Na)
 
 if type_of_spring_ends == 1:
@@ -145,21 +145,22 @@ if type_of_spring_ends == 1:
     Ls = diameter * Nt
     L_o = Ls + (1+robus_linearity)*ymax
     pitch = L_o/(Na + 1)
-    Lcr = 2.63*D/alpha
-    fom = (2.6 * pow(math.pi,2) * diameter**2 * Nt * D )/ (4*pow(25.4,3))
+    Lcr = 2.63*D/0.5
+    fom = -(2.6 * pow(math.pi,2) * diameter**2 * Nt * D )/ (4*pow(25.4,3))
 if type_of_spring_ends == 2:
     Nt = Na +2
     Ls = diameter *( Nt + 1)
     L_o = Ls + (1+robus_linearity)*ymax
     pitch = (L_o - 3*diameter)/Na
-    Lcr = 2.63*D/alpha
-    fom = (2.6 * pow(math.pi,2) * diameter**2 * Nt * D )/ (4*pow(25.4,3))
+    Lcr = 2.63*D/0.5
+    fom = -(2.6 * pow(math.pi,2) * diameter**2 * Nt * D )/ (4*pow(25.4,3))
 if type_of_spring_ends == 3:
     Nt = Na +2
     Ls = diameter * Nt
     L_o = Ls + (1+robus_linearity)*ymax
     pitch = (L_o - 2*diameter)/Na
-    Lcr = 2.63*D/alpha
-    fom = (2.6 * pow(math.pi,2) * diameter**2 * Nt * D )/ (4*pow(25.4,3))
+    Lcr = 2.63*D/0.5
+    fom = -(2.6 * pow(math.pi,2) * diameter**2 * Nt * D )/ (4*pow(25.4,3))
 
 print("Nt,Ls,L_o,Lcr,pitch,fom",Nt,Ls,L_o,Lcr,pitch,fom)
+
