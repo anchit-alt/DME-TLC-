@@ -8,7 +8,7 @@ import math
 from sympy import *
 from sympy import symbols, solve
 import time 
-from flask import Flask , render_template , request , current_app
+from flask import Flask , render_template , request , current_app , jsonify
 import pandas as pd 
 app = Flask(__name__)
 dummy = None
@@ -28,12 +28,206 @@ def home():
     return render_template("index.html")
             # render_template("/Users/anchit/Documents/GitHub/DME-TLC-/Codes/templates/index.html")
 
-@app.route("/chapter10.html",methods = ["POST","GET"])
-def chapter10():
+@app.route("/chapter_10.html",methods = ["POST","GET"])
+def chapter_10():
     if request.method == "POST":
-        pass
+        # Collect initial inputs
+        type_of_spring_ends = (request.form.get("type_of_spring_ends"))
+        fmax = float(request.form.get("fmax"))
+        ymax = float(request.form.get("ymax"))
+        design_factor = float(request.form.get("design_factor")) 
+        robus_linearity = float(request.form.get("robus_linearity"))
+
+        diameter = float(request.form.get("diameter")) 
+        user_input = (request.form.get("user_input"))
+
+        # Load datasets
+        file_path = "Data/spring_wire_constants.csv"
+        data = pd.read_csv(file_path)
+        file_path_2 = "Data/spring_wire_mechanical_properties.csv"
+        data_2 = pd.read_csv(file_path_2)
+
+
+        def get_material_properties(d, material_name):
+            material_data = data[data['Material'].str.contains(material_name, case=False, na=False)]
+            matched_rows = []
+            
+            for i, row in material_data.iterrows():
+                try:
+                    d_min, d_max = map(float, row['Diameter (in)'].split('-'))
+                    if d_min <= d <= d_max:
+                        matched_rows.append(row)
+                except ValueError:
+                    continue
+            
+            if matched_rows:
+                return matched_rows[0]
+            else:
+                return None
+
+
+        def get_mechanical_properties(d, material_name):
+            filtered_data = data_2[data_2['Material'].str.contains(material_name, case=False, na=False)]
+            for _, row in filtered_data.iterrows():
+                if is_diameter_in_range(row['Diameter d (in)'], d):
+                    return row['E (GPa)'], row['G (GPa)']
+            return None, None
+
+
+        def is_diameter_in_range(dia_range, dia_value):
+            if '<' in dia_range:
+                return dia_value < float(dia_range.replace('<', ''))
+            elif '>' in dia_range:
+                return dia_value > float(dia_range.replace('>', ''))
+            elif '-' in dia_range:
+                lower, upper = map(float, dia_range.split('-'))
+                return lower <= dia_value <= upper
+            return False
+
+
+        def calculate_spring_parameters(diameter):
+            d = diameter / 25.4
+            material_info = get_material_properties(d, user_input)
+            
+            if material_info is None or material_info.empty:
+                print(f"Material {user_input} not found for diameter {diameter} mm")
+                return
+            
+            a_mpa = material_info['A (MPa·mm^m)']
+            exponent_m = material_info['Exponent m']
+            e_gpa, g_gpa = get_mechanical_properties(d, material_info['Material'])
+            
+            Ssy = (0.45 * a_mpa) / pow(diameter, exponent_m)
+            alpha = Ssy / design_factor
+            beta = (8 * (1 + robus_linearity) * fmax) / (math.pi * diameter ** 2)
+            x = (2 * alpha - beta) / (4 * beta)
+            C = x + math.sqrt((x ** 2 - (3 * alpha) / (4 * beta)))
+            
+            D = C * diameter
+            KB = (4 * C + 2) / (4 * C - 3)
+            tau_s = (8 * KB * (1 + robus_linearity) * fmax * D) / (math.pi * pow(diameter, 3))
+            OD = D + diameter
+            ID = D - diameter
+            Na = ((g_gpa * pow(diameter, 4) * ymax) / (8 * pow(D, 3) * fmax)) * 1e3
+            
+            Nt, Ls, L_o, pitch, Lcr, fom = 0, 0, 0, 0, 0, 0
+            if type_of_spring_ends == "P&G":
+                Nt = Na + 1
+                Ls = diameter * Nt
+                L_o = Ls + (1 + robus_linearity) * ymax
+                pitch = L_o / (Na + 1)
+                Lcr = 2.63 * D / 0.5
+            elif type_of_spring_ends == "SOC":
+                Nt = Na + 2
+                Ls = diameter * (Nt + 1)
+                L_o = Ls + (1 + robus_linearity) * ymax
+                pitch = (L_o - 3 * diameter) / Na
+                Lcr = 2.63 * D / 0.5
+            elif type_of_spring_ends == "S&G":
+                Nt = Na + 2
+                Ls = diameter * Nt
+                L_o = Ls + (1 + robus_linearity) * ymax
+                pitch = (L_o - 2 * diameter) / Na
+                Lcr = 2.63 * D / 0.5
+
+            print(f"Results for diameter {diameter} mm:")
+            print(f"OD: {OD}, ID: {ID}, Nt: {Nt}, Ls: {Ls}, L_o: {L_o}, Pitch: {pitch}, Lcr: {Lcr}, Na: {Na}")
+            print("------------------------")
+            return {
+                "Diameter (mm)": diameter, "OD": OD, "ID": ID, "Nt": Nt, "Ls": Ls,
+                "L_o": L_o, "Pitch": pitch, "Lcr": Lcr, "Na": Na
+            }
+            
+
+        
+        diameters = [diameter - 0.2, diameter - 0.1, diameter, diameter + 0.1, diameter + 0.2, diameter + 0.3]
+        
+        results = [calculate_spring_parameters(dia) for dia in diameters]
+        results = [r for r in results if r is not None]
+        
+        response = f'''
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Spring Design Results</title>
+            <style>
+                body {{
+                    font-family: Arial, sans-serif;
+                    margin: 40px;
+                    background-color: #f4f4f4;
+                }}
+                h2 {{
+                    text-align: center;
+                }}
+                table {{
+                    width: 100%;
+                    border-collapse: collapse;
+                    background: #fff;
+                    margin-top: 20px;
+                }}
+                th, td {{
+                    border: 1px solid #ddd;
+                    padding: 10px;
+                    text-align: center;
+                }}
+                th {{
+                    background: #007bff;
+                    color: white;
+                }}
+                tr:nth-child(even) {{
+                    background: #f2f2f2;
+                }}
+            </style>
+        </head>
+        <body>
+            <h2>Spring Design Results</h2>
+
+            <table>
+                <tr>
+                    <th>Diameter (mm)</th>
+                    <th>Outer Diameter (OD)</th>
+                    <th>Inner Diameter (ID)</th>
+                    <th>Total Coils (Nt)</th>
+                    <th>Solid Length (Ls)</th>
+                    <th>Free Length (L_o)</th>
+                    <th>Pitch</th>
+                    <th>Critical Length (Lcr)</th>
+                    <th>Active Coils (Na)</th>
+                </tr>
+        '''
+        for result in results:
+           response += f'''
+            <tr>
+                <td>{result["Diameter (mm)"]:.2f}</td>
+                <td>{result["OD"]:.2f}</td>
+                <td>{result["ID"]:.2f}</td>
+                <td>{result["Nt"]:.2f}</td>
+                <td>{result["Ls"]:.2f}</td>
+                <td>{result["L_o"]:.2f}</td>
+                <td>{result["Pitch"]:.2f}</td>
+                <td>{result["Lcr"]:.2f}</td>
+                <td>{result["Na"]:.2f}</td>
+            </tr>
+            '''
+        
+        response += '''
+            </table>
+            <a href="/chapter_10.html"><button>Back</button></a>
+            <a href="/"><button>Return to Home</button></a>
+           
+        </body>
+        </html>
+        '''
+
+        return response
+        
+        # for dia in diameters:
+        #     calculate_spring_parameters(dia)
+
     else:
-        return render_template("chapter10.html")
+        return render_template("chapter_10.html")
 
 
 @app.route("/chapter12.html",methods = ["POST","GET"])
