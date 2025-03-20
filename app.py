@@ -28,6 +28,133 @@ def home():
     return render_template("index.html")
             # render_template("/Users/anchit/Documents/GitHub/DME-TLC-/Codes/templates/index.html")
 
+@app.route("/chapter8.html",methods = ["POST","GET"])
+def chapter8():
+    if request.method == "POST":  
+        # Load data
+        A31 = pd.read_csv("Data/nominal_sizes_mm.csv")
+        table_8_1 = pd.read_csv("Data/screw_thread_data.csv")
+
+        # User input
+        type_of_nut = request.form.get("type_of_nut")
+        print("Selected Nut:", type_of_nut)
+
+        d = float(type_of_nut.removeprefix("M"))  # Convert to float
+        print("Nominal Diameter d:", d)
+
+        l = float(request.form.get("l"))
+
+        # Find Regular Hexagonal Value
+        H = A31.loc[A31["Nominal Size (mm)"] == type_of_nut, "Regular Hexagonal"]
+        if not H.empty:
+            H = float(H.values[0])  # Extract float value
+            print(f"Regular Hexagonal value for {type_of_nut}: {H}")
+        else:
+            print("Nominal size not found")
+            exit()
+
+        # Calculate Total Bolt Length
+        L = 2 * l + H
+        print("Initial Bolt Length:", L)
+
+        # Rounding function
+        def myround(x, base=5):
+            return base * round(x / base)
+
+        L = myround(L)  # Ensure L is a scalar
+        print("Rounded Bolt Length:", L)
+
+        # Determine Thread Length (L_T)
+        if L <= 125:
+            L_T = 2 * d + 6
+        elif 125 < L <= 200:
+            L_T = 2 * d + 12
+        else:
+            L_T = 2 * d + 25
+
+        print("Thread Length L_T:", L_T)
+
+        # Calculate Lengths of Threaded and Unthreaded Portions
+        l_d = L - L_T
+        print("Length of Unthreaded Portion (Grip):", l_d)
+
+        l_t = 2*l - l_d
+        print("Length of Threaded Portion in Grip:", l_t)
+
+        # Area Calculations
+        A_d = math.pi * pow(d, 2) / 4
+        print("Area of Unthreaded Portion:", A_d)
+
+        A_t = table_8_1.loc[table_8_1["Nominal Major Diameter d (mm)"] == d, "Minor-Diameter Area Ar (mm²) (Fine)"]
+        if not A_t.empty:
+            A_t = float(A_t.values[0])
+            print("Area of Threaded Portion:", A_t)
+        else:
+            print("Nominal Major Diameter not found in table.")
+            exit()
+
+        # Stiffness Calculations
+        E = 207
+
+        Kb = (A_d * A_t * E) / (A_d * l_t + A_t * l_d)
+        print("Bolt Stiffness (Kb):", Kb)
+
+        x = 2 * math.log((5 * (0.5774 * 2 * l + 0.5 * d) / (0.5774 *2* l + 2.5 * d)))
+        if x == 0:
+            print("Warning: Division by zero in Km calculation!")
+            exit()
+
+        Km = (0.5774 * math.pi * E * d) / x
+        print("Joint Stiffness (Km):", Km)
+
+        return f"""
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Calculation Results</title>
+            <style>
+                body {{
+                    font-family: Arial, sans-serif;
+                    background-color: #f4f4f4;
+                    text-align: center;
+                    padding: 50px;
+                }}
+                .container {{
+                    background: white;
+                    padding: 20px;
+                    border-radius: 10px;
+                    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+                    display: inline-block;
+                }}
+                h2 {{
+                    color: #333;
+                }}
+                .result {{
+                    font-size: 18px;
+                    margin: 10px 0;
+                    padding: 10px;
+                    background: #e6f7ff;
+                    border-left: 5px solid #007bff;
+                }}
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h2>Calculation Results</h2>
+                <div class="result"><strong>Bolt Length (L):</strong> {L} mm</div>
+                <div class="result"><strong>Bolt Stiffness (Kb):</strong> {Kb:.2f} N/mm</div>
+                <div class="result"><strong>Joint Stiffness (Km):</strong> {Km:.2f} N/mm</div>
+            </div>
+        </body>
+        </html>
+        """
+
+    else:
+        return render_template("chapter8.html")
+
+
 @app.route("/chapter_10.html",methods = ["POST","GET"])
 def chapter_10():
     if request.method == "POST":
