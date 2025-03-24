@@ -164,3 +164,5 @@ if type_of_spring_ends == 3:
 
 print("Nt,Ls,L_o,Lcr,pitch,fom",Nt,Ls,L_o,Lcr,pitch,fom)
 
+
+

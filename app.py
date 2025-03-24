@@ -258,11 +258,11 @@ def chapter_10():
                 Lcr = 2.63 * D / 0.5
 
             print(f"Results for diameter {diameter} mm:")
-            print(f"OD: {OD}, ID: {ID}, Nt: {Nt}, Ls: {Ls}, L_o: {L_o}, Pitch: {pitch}, Lcr: {Lcr}, Na: {Na}")
+            print(f"OD: {OD}, ID: {ID}, Nt: {Nt}, Ls: {Ls}, L_o: {L_o}, Pitch: {pitch}, Lcr: {Lcr}, Na: {Na} , C: {C}")
             print("------------------------")
             return {
                 "Diameter (mm)": diameter, "OD": OD, "ID": ID, "Nt": Nt, "Ls": Ls,
-                "L_o": L_o, "Pitch": pitch, "Lcr": Lcr, "Na": Na
+                "L_o": L_o, "Pitch": pitch, "Lcr": Lcr, "Na": Na , "C":C
             }
             
 
@@ -306,6 +306,9 @@ def chapter_10():
                 tr:nth-child(even) {{
                     background: #f2f2f2;
                 }}
+                .highlight {{
+                    background-color: yellow;
+                }}
             </style>
         </head>
         <body>
@@ -322,34 +325,41 @@ def chapter_10():
                     <th>Pitch</th>
                     <th>Critical Length (Lcr)</th>
                     <th>Active Coils (Na)</th>
+                    <th>C</th>
+
                 </tr>
         '''
         for result in results:
-           response += f'''
-            <tr>
-                <td>{result["Diameter (mm)"]:.2f}</td>
-                <td>{result["OD"]:.2f}</td>
-                <td>{result["ID"]:.2f}</td>
-                <td>{result["Nt"]:.2f}</td>
-                <td>{result["Ls"]:.2f}</td>
-                <td>{result["L_o"]:.2f}</td>
-                <td>{result["Pitch"]:.2f}</td>
-                <td>{result["Lcr"]:.2f}</td>
-                <td>{result["Na"]:.2f}</td>
-            </tr>
+            highlight_Na = 'highlight' if not 3 <= result["Na"] <= 15 else ''
+            # highlight_Lcr = 'highlight' if not  4 <= result["Lcr"] <= 12 else ''
+            highlight_Ls = 'highlight' if not  result["Ls"] <= 25.4 else ''
+            highlight_Lo = 'highlight' if not result["L_o"] <= 101.6 else ''
+            highlight_C = 'highlight' if not 4 <= result["C"] <=12 else ''
+
+            response += f'''
+                <tr>
+                    <td>{result["Diameter (mm)"]:.2f}</td>
+                    <td>{result["OD"]:.2f}</td>
+                    <td>{result["ID"]:.2f}</td>
+                    <td>{result["Nt"]:.2f}</td>
+                    <td class="{highlight_Ls}">{result["Ls"]:.2f}</td>
+                    <td class="{highlight_Lo}">{result["L_o"]:.2f}</td>
+                    <td>{result["Pitch"]:.2f}</td>
+                    <td>{result["Lcr"]:.2f}</td>
+                    <td class="{highlight_Na}">{result["Na"]:.2f}</td>
+                    <td class="{highlight_C}">{result["C"]:.2f}</td>
+                </tr>
             '''
-        
+
         response += '''
             </table>
             <a href="/chapter_10.html"><button>Back</button></a>
             <a href="/"><button>Return to Home</button></a>
-           
         </body>
         </html>
         '''
 
         return response
-        
         # for dia in diameters:
         #     calculate_spring_parameters(dia)
 
