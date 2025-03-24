@@ -12,7 +12,7 @@ print("Selected Nut:", type_of_nut)
 d = float(type_of_nut.removeprefix("M"))  # Convert to float
 print("Nominal Diameter d:", d)
 
-l = float(input("Enter length of steel plates: "))
+l = float(input("Enter thickness of steel plates: "))
 
 # Find Regular Hexagonal Value
 H = A31.loc[A31["Nominal Size (mm)"] == type_of_nut, "Regular Hexagonal"]

@@ -309,6 +309,9 @@ def chapter_10():
                 .highlight {{
                     background-color: yellow;
                 }}
+                .row-highlight {{
+                    background-color: #add8e6;
+                }}
             </style>
         </head>
         <body>
@@ -335,6 +338,8 @@ def chapter_10():
             highlight_Ls = 'highlight' if not  result["Ls"] <= 25.4 else ''
             highlight_Lo = 'highlight' if not result["L_o"] <= 101.6 else ''
             highlight_C = 'highlight' if not 4 <= result["C"] <=12 else ''
+
+            row_class = "row-highlight" if highlight_Na or highlight_C or highlight_Ls or highlight_Lo else ""
 
             response += f'''
                 <tr>
