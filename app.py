@@ -101,62 +101,126 @@ def chapter9():
             x = math.sqrt(pow(m,2) + pow(n,2))
             F = tau_allow / x 
             print("F ", F)
-        return f'''
-        <html>
-        <head>
-            <title>Weld Analysis Results</title>
-            <meta name="viewport" content="width=device-width, initial-scale=1">
-            <style>
-                body {{ font-family: Arial, sans-serif; background-color: #f4f4f4; text-align: center; }}
-                table {{ width: 90%; max-width: 600px; margin: auto; border-collapse: collapse; background: white; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }}
-                th, td {{ padding: 12px; border: 1px solid #ddd; text-align: center; }}
-                th {{ background-color: #4CAF50; color: white; }}
-                td {{ font-size: 18px; }}
-                h2 {{ color: #333; }}
-                .button-container {{ margin-top: 20px; display: flex; flex-direction: column; align-items: center; gap: 10px; }}
-                .button {{
-                    display: inline-block;
-                    padding: 12px 20px;
-                    font-size: 16px;
-                    color: white;
-                    background-color: #4CAF50;
-                    border: none;
-                    border-radius: 5px;
-                    text-decoration: none;
-                    cursor: pointer;
-                    transition: background 0.3s;
-                    width: 80%;
-                    max-width: 300px;
-                    text-align: center;
-                }}
-                .button:hover {{
-                    background-color: #45a049;
-                }}
-            </style>
-        </head>
-        <body>
-            <h2>Results for Weld Type {type_of_weld}</h2>
-            <table>
-                <tr>
-                    <th>Property</th>
-                    <th>Value</th>
-                </tr>
-                <tr>
-                    <td>J</td>
-                    <td>{J:.4f}</td>
-                </tr>
-                <tr>
-                    <td>F</td>
-                    <td>{F:.4f}</td>
-                </tr>
-            </table>
-            <div class="button-container">
-                <a href="/" class="button">Home</a>
-                <a href="javascript:history.back()" class="button">Previous Page</a>
-            </div>
-        </body>
-        </html>
-        '''
+
+        EXX = request.form.get("EXX")
+        def get_weld_strength(aws_number):
+            file_path = "Data/Weld_Metal_Properties.csv" 
+            df = pd.read_csv(file_path)
+            row = df[df["AWS Electrode Number"].str.strip() == aws_number.strip()]
+            
+            if not row.empty:
+                tensile_strength = row.iloc[0]["Tensile Strength kpsi (MPa)"]
+                yield_strength = row.iloc[0]["Yield Strength kpsi (MPa)"]
+                return tensile_strength, yield_strength
+            else:
+                return None, None
+        Sut_electrode, Sy_electrode = get_weld_strength(EXX)
+        AISI_BAR = (request.form.get("AISI_BAR"))
+        AISI_MAT= (request.form.get("AISI_MAT"))
+
+        def get_aisi_strength(aisi_number, processing_type):
+            file_path = "Data/ASTM_Steel_Properties.csv" 
+            df = pd.read_csv(file_path)
+            # Search for the AISI number and processing type
+            row = df[(df["SAE and/or AISI No."].astype(str).str.strip() == str(aisi_number).strip()) &
+                    (df["Processing"].str.strip().str.upper() == processing_type.strip().upper())]
+            
+            if not row.empty:
+                tensile_strength = row.iloc[0]["Tensile Strength (MPa) (kpsi)"].split(" (")[0]  # Extract MPa value
+                yield_strength = row.iloc[0]["Yield Strength (MPa) (kpsi)"].split(" (")[0]  # Extract MPa value
+                return int(tensile_strength), int(yield_strength)
+            else:
+                return None, None
+        processing_type_bar = request.form.get("processing_type_bar")
+        processing_type_mat = request.form.get("processing_type_mat")
+    
+        tensile_strength_bar, yield_strength_bar = get_aisi_strength(AISI_BAR, processing_type_bar)
+        print("tensile_strength_bar,yield_strength_bar ",tensile_strength_bar,yield_strength_bar)
+
+        tensile_strength_mat, yield_strength_mat = get_aisi_strength(AISI_MAT, processing_type_mat)
+        print("tensile_strength_mat,yield_strength_mat ",tensile_strength_mat,yield_strength_mat)
+
+        new_t_allow = min(0.30*tensile_strength_mat,0.40*yield_strength_mat)
+
+        F_new = new_t_allow / x
+
+        print("new_t_allow ",new_t_allow)
+
+        print("F new " , F_new)
+            
+        return  f'''
+<html>
+<head>
+    <title>Weld Analysis Results</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {{ font-family: Arial, sans-serif; background-color: #f4f4f4; text-align: center; }}
+        table {{ width: 90%; max-width: 600px; margin: auto; border-collapse: collapse; background: white; 
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }}
+        th, td {{ padding: 12px; border: 1px solid #ddd; text-align: center; }}
+        th {{ background-color: #4CAF50; color: white; }}
+        td {{ font-size: 18px; }}
+        h2 {{ color: #333; }}
+        .button-container {{ margin-top: 20px; display: flex; flex-direction: column; align-items: center; gap: 10px; }}
+        .button {{
+            display: inline-block;
+            padding: 12px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background 0.3s;
+            width: 80%;
+            max-width: 300px;
+            text-align: center;
+        }}
+        .button:hover {{
+            background-color: #45a049;
+        }}
+    </style>
+</head>
+<body>
+    <h2>Results for Weld Type {type_of_weld}</h2>
+    <table>
+        <tr>
+            <th>Property</th>
+            <th>Value</th>
+        </tr>
+        <tr>
+            <td>J</td>
+            <td>{J:.4f}</td>
+        </tr>
+        <tr>
+            <td>F</td>
+            <td>{F:.4f}</td>
+        </tr>
+        <tr>
+            <td>Sut (Electrode)</td>
+            <td>{Sut_electrode if Sut_electrode is not None else "N/A"}</td>
+        </tr>
+        <tr>
+            <td>Sy (Electrode)</td>
+            <td>{Sy_electrode if Sy_electrode is not None else "N/A"}</td>
+        </tr>
+        <tr>
+            <td>New Allowable Shear Stress</td>
+            <td>{new_t_allow:.4f}</td>
+        </tr>
+        <tr>
+            <td>F (New)</td>
+            <td>{F_new:.4f}</td>
+        </tr>
+    </table>
+    <div class="button-container">
+        <a href="/" class="button">Home</a>
+        <a href="javascript:history.back()" class="button">Previous Page</a>
+    </div>
+</body>
+</html>
+'''
     else:
         return render_template("chapter9.html")
 @app.route("/chapter8.html",methods = ["POST","GET"])
