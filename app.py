@@ -28,6 +28,137 @@ def home():
     return render_template("index.html")
             # render_template("/Users/anchit/Documents/GitHub/DME-TLC-/Codes/templates/index.html")
 
+
+@app.route("/chapter9.html",methods = ["POST","GET"])
+def chapter9():
+    if request.method == "POST":
+        type_of_weld = request.form.get("type_of_weld")
+        h = float(request.form.get("h"))
+        d = float(request.form.get("d"))
+        b = float(request.form.get("b"))
+        c = float(request.form.get("c"))
+        tau_allow = float(request.form.get("tau_allow"))
+        r = float(request.form.get("r"))
+        if type_of_weld == "1":
+            A = 0.707 * h * d
+            J_u = pow(d,3) / 12
+
+            J = 0.707 * h * J_u
+            print("J ",J)
+            m = (((c+ (b/2) ) * (b/2) * pow(10,3))/ J)
+            n = ( (pow(10,3)/A) + ((c +(d/2)) * (d/2) * (pow(10,3)))/ J )
+            x = math.sqrt(pow(m,2) + pow(n,2))
+            F = tau_allow / x 
+            print("F ", F)
+        if type_of_weld == "2":
+            A = 1.414 * h * d
+            J_u = d * (3 * pow(b,2) + pow(d,2)) / 6
+
+            J = 0.707 * h * J_u
+            print("J ",J)
+            m = (((c+ (b/2) ) * (b/2) * pow(10,3))/ J)
+            n = ( (pow(10,3)/A) + ((c +(d/2)) * (d/2) * (pow(10,3)))/ J )
+            x = math.sqrt(pow(m,2) + pow(n,2))
+            F = tau_allow / x 
+            print("F ", F)
+        if type_of_weld == "3":
+            A = 0.707 * h * (b + d)
+            J_u = (pow(b+d,4) - 6 * pow(b,2) * pow(d,2)) / (12 * (b + d))
+            J = 0.707 * h * J_u
+            print("J ",J)
+            m = (((c+ (b/2) ) * (b/2) * pow(10,3))/ J)
+            n = ( (pow(10,3)/A) + ((c +(d/2)) * (d/2) * (pow(10,3)))/ J )
+            x = math.sqrt(pow(m,2) + pow(n,2))
+            F = tau_allow / x 
+            print("F ", F)
+        if type_of_weld == "4":
+            A = 0.707 * h * (2*b + d)
+            J_u = ((8 * pow(b,3) + 6 * b * pow(d,2) + pow(d,3))/ 12) - (((pow(b,4) )/ (2 * b + d)))
+            J = 0.707 * h * J_u
+            print("J ",J)
+            m = (((c+ (b/2) ) * (b/2) * pow(10,3))/ J)
+            n = ( (pow(10,3)/A) + ((c +(d/2)) * (d/2) * (pow(10,3)))/ J )
+            x = math.sqrt(pow(m,2) + pow(n,2))
+            F = tau_allow / x 
+            print("F ", F)
+        if type_of_weld == "5":
+            A = 1.414*h*(b+d)
+            J_u = pow(b+d,3) / 6 
+            J = 0.707 * h * J_u
+            print("J ",J)
+            m = (((c+ (b/2) ) * (b/2) * pow(10,3))/ J)
+            n = ( (pow(10,3)/A) + ((c +(d/2)) * (d/2) * (pow(10,3)))/ J )
+            x = math.sqrt(pow(m,2) + pow(n,2))
+            F = tau_allow / x 
+            print("F ", F)
+        if type_of_weld == "6":
+            A = 1.414 * math.pi * h * r 
+            J_u = 2 * math.pi * pow(r,3)
+            J = 0.707 * h * J_u
+            print("J ",J)
+            m = (((c+ (b/2) ) * (b/2) * pow(10,3))/ J)
+            n = ( (pow(10,3)/A) + ((c +(d/2)) * (d/2) * (pow(10,3)))/ J )
+            x = math.sqrt(pow(m,2) + pow(n,2))
+            F = tau_allow / x 
+            print("F ", F)
+        return f'''
+        <html>
+        <head>
+            <title>Weld Analysis Results</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <style>
+                body {{ font-family: Arial, sans-serif; background-color: #f4f4f4; text-align: center; }}
+                table {{ width: 90%; max-width: 600px; margin: auto; border-collapse: collapse; background: white; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }}
+                th, td {{ padding: 12px; border: 1px solid #ddd; text-align: center; }}
+                th {{ background-color: #4CAF50; color: white; }}
+                td {{ font-size: 18px; }}
+                h2 {{ color: #333; }}
+                .button-container {{ margin-top: 20px; display: flex; flex-direction: column; align-items: center; gap: 10px; }}
+                .button {{
+                    display: inline-block;
+                    padding: 12px 20px;
+                    font-size: 16px;
+                    color: white;
+                    background-color: #4CAF50;
+                    border: none;
+                    border-radius: 5px;
+                    text-decoration: none;
+                    cursor: pointer;
+                    transition: background 0.3s;
+                    width: 80%;
+                    max-width: 300px;
+                    text-align: center;
+                }}
+                .button:hover {{
+                    background-color: #45a049;
+                }}
+            </style>
+        </head>
+        <body>
+            <h2>Results for Weld Type {type_of_weld}</h2>
+            <table>
+                <tr>
+                    <th>Property</th>
+                    <th>Value</th>
+                </tr>
+                <tr>
+                    <td>J</td>
+                    <td>{J:.4f}</td>
+                </tr>
+                <tr>
+                    <td>F</td>
+                    <td>{F:.4f}</td>
+                </tr>
+            </table>
+            <div class="button-container">
+                <a href="/" class="button">Home</a>
+                <a href="javascript:history.back()" class="button">Previous Page</a>
+            </div>
+        </body>
+        </html>
+        '''
+    else:
+        return render_template("chapter9.html")
 @app.route("/chapter8.html",methods = ["POST","GET"])
 def chapter8():
     if request.method == "POST":  
