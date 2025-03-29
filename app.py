@@ -28,7 +28,19 @@ def home():
     return render_template("index.html")
             # render_template("/Users/anchit/Documents/GitHub/DME-TLC-/Codes/templates/index.html")
 
-
+@app.route("/slider.html" , methods = ["POST","GET"])
+def slider():
+    if request.method == "POST":
+        pass
+    else:
+        return render_template("slider.html")
+    
+@app.route("/api.html" , methods = ["POST","GET"])
+def api():
+    if request.method == "POST":
+        pass
+    else:
+        return render_template("api.html")
 @app.route("/chapter9.html",methods = ["POST","GET"])
 def chapter9():
     if request.method == "POST":

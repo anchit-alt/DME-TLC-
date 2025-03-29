@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkyCiv Beam Analysis</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Include Chart.js -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        canvas {
+            max-width: 600px;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>SkyCiv Shear Force & Bending Moment Diagrams</h2>
+    <button onclick="getBeamData()">Get Beam Data</button>
+
+    <h3>Shear Force Diagram (SFD)</h3>
+    <canvas id="sfdChart"></canvas>
+
+    <h3>Bending Moment Diagram (BMD)</h3>
+    <canvas id="bmdChart"></canvas>
+
+    <script>
+        async function getBeamData() {
+            const apiKey = "DOBwMx3wlLJShqxS27xVF0wuMKWV7rfk8cfuvYwkikseMRXIgyLhnuCOVWTyfiz8"; // Replace with your actual API key
+
+            const requestBody = {
+                auth: {
+                    username: "f20212452@goa.bits-pilani.ac.in",  // Replace with your SkyCiv username
+                    key: apiKey
+                },
+                functions: [
+                    {
+                        function: "S3D.solve",
+                        arguments: {
+                            model: {
+                                settings: {
+                                    units: "metric"
+                                },
+                                members: [
+                                    {
+                                        id: 1,
+                                        node_A: 1,
+                                        node_B: 2,
+                                        section_id: 1
+                                    }
+                                ],
+                                nodes: [
+                                    { id: 1, x: 0, y: 0, z: 0 },
+                                    { id: 2, x: 5, y: 0, z: 0 }
+                                ],
+                                supports: [
+                                    { id: 1, node: 1, restraint_code: "111111" }
+                                ],
+                                loads: [
+                                    { type: "D", node: 2, Fy: -10 }
+                                ]
+                            }
+                        }
+                    }
+                ]
+            };
+
+            try {
+                const response = await fetch("https://api.skyciv.com/v3", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(requestBody)
+                });
+
+                const data = await response.json();
+                console.log("Response Data:", data);
+
+                if (data.response) {
+                    if (data.response.sfd) {
+                        plotSFD(data.response.sfd);
+                    }
+                    if (data.response.bmd) {
+                        plotBMD(data.response.bmd);
+                    }
+                }
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        }
+
+        function plotSFD(sfdData) {
+            const positions = Object.keys(sfdData).map(Number); // Get x-coordinates
+            const forces = Object.values(sfdData).map(Number);  // Get shear force values
+
+            const ctx = document.getElementById('sfdChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: positions,
+                    datasets: [{
+                        label: 'Shear Force (kN)',
+                        data: forces,
+                        borderColor: 'red',
+                        borderWidth: 2,
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: { title: { display: true, text: "Position (m)" } },
+                        y: { title: { display: true, text: "Shear Force (kN)" } }
+                    }
+                }
+            });
+        }
+
+        function plotBMD(bmdData) {
+            const positions = Object.keys(bmdData).map(Number); // Get x-coordinates
+            const moments = Object.values(bmdData).map(Number); // Get bending moment values
+
+            const ctx = document.getElementById('bmdChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: positions,
+                    datasets: [{
+                        label: 'Bending Moment (kN·m)',
+                        data: moments,
+                        borderColor: 'blue',
+                        borderWidth: 2,
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: { title: { display: true, text: "Position (m)" } },
+                        y: { title: { display: true, text: "Bending Moment (kN·m)" } }
+                    }
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>

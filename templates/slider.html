@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movable Load on Cantilever Beam</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        .container {
+            position: relative;
+            display: inline-block;
+            text-align: left;
+        }
+        .beam-container {
+            position: relative;
+            width: 600px; /* Set image width explicitly */
+            overflow: hidden; /* Hide any extra white space */
+        }
+        img {
+            width: 600px;
+            display: block;
+        }
+        .arrow {
+            position: absolute;
+            top: 30px; /* Adjust vertical position */
+            color: red;
+            font-size: 24px;
+            text-align: center;
+            transform: translateX(-50%);
+        }
+        .arrow-line {
+            width: 2px;
+            height: 60px; /* Longer arrow */
+            background-color: red;
+            margin: 0 auto;
+        }
+        .slider-container {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Move the Load on the Cantilever Beam</h2>
+
+    <div class="container">
+        <div class="beam-container">
+            <img src="static/images/Untitled design-2.png" id="beam" alt="Cantilever Beam">
+            <div id="arrow" class="arrow">  
+                <strong>W</strong><br>
+                <div class="arrow-line"></div> <!-- Long vertical arrow -->
+                ↓
+            </div>
+        </div>
+    </div>
+
+    <div class="slider-container">
+        <label for="position">Load Position (a): </label>
+        <input type="range" id="position" min="0" max="2000" value="0" step="1" oninput="moveArrow(this.value)">
+        <span id="value">0</span> mm
+    </div>
+
+    <script>
+        let a = 0; // Variable to store load position in mm
+        let beamWidth = 600;  // Image width in pixels
+        let maxMM = 2000;     // Total beam length in mm
+        let offsetMM = 0;   // 145 mm is the original starting position
+        let adjustedMax = maxMM - offsetMM; // New max value for slider (2000 - 145 = 1855)
+
+        function moveArrow(value) {
+            let beamStartOffset = 5; // Shift to align arrow with beam start
+
+            // Convert slider value to actual position (add offset back)
+            let actualMM = parseInt(value) + offsetMM;
+
+            // Map the adjusted value to pixel position
+            let pixelPosition = (value / adjustedMax) * (beamWidth - beamStartOffset) + beamStartOffset;
+
+            // Move the arrow
+            document.getElementById("arrow").style.left = pixelPosition + "px";
+
+            // Update displayed value
+            document.getElementById("value").textContent = actualMM;
+
+            // Store value of a
+            a = actualMM;
+            console.log("Current load position (a):", a); // Logging value to console
+        }
+
+        // Initialize the arrow position correctly at 0 mm
+        moveArrow(0);
+    </script>
+
+</body>
+</html>
