@@ -22,6 +22,13 @@ def delay_decorator(function):
 
 axial = 0
 radial = 0
+a_value = 0
+
+
+
+
+
+
 @app.route("/")
 def home():
     # template_path = os.path.abspath("/Users/anchit/Documents/GitHub/DME-TLC-/Codes/templates/index.html")
@@ -31,7 +38,10 @@ def home():
 @app.route("/slider.html" , methods = ["POST","GET"])
 def slider():
     if request.method == "POST":
-        pass
+        global a_value
+        data = request.get_json()
+        a_value = data.get('a')
+        print("Received value of a:", a_value)
     else:
         return render_template("slider.html")
     
@@ -41,6 +51,8 @@ def api():
         pass
     else:
         return render_template("api.html")
+    
+    
 @app.route("/chapter9.html",methods = ["POST","GET"])
 def chapter9():
     if request.method == "POST":

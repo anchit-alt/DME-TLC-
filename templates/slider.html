@@ -89,6 +89,17 @@
             // Store value of a
             a = actualMM;
             console.log("Current load position (a):", a); // Logging value to console
+            fetch('/update_a', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ a: a })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Server response:', data);
+    });
         }
 
         // Initialize the arrow position correctly at 0 mm
