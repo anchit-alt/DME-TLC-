@@ -1,14 +1,12 @@
-# from bs4 import BeautifulSoup
+
 from flask import redirect, url_for
 import cv2
 import csv
-# import os
-# import lxml
 import math
 from sympy import *
 from sympy import symbols, solve
 import time 
-from flask import Flask , render_template , request , current_app , jsonify
+from flask import Flask , render_template , request
 import pandas as pd 
 app = Flask(__name__)
 dummy = None
@@ -2119,38 +2117,6 @@ def page1():
         return render_template("fos.html")
 
 
-# @app.route("/fos2.html")
-# def page2():
-#     return render_template("fos2.html")
-
-# @app.route("/fos.html",methods = ["POST","GET"])
-# def factor():
-#     if request.method == "POST":
-#         pass
-#     return render_template("fos.html")
-
-
 
 if __name__ == "__main__":
-    app.run(debug=True)
-
-
-
-# class User:
-#     def __init__(self, name):
-#         self.name = name
-#         self.is_logged_in = False
-
-# def is_authenticated_decorator(function):
-#     def wrapper(*args, **kwargs):
-#         if args[0].is_logged_in == True:
-#             function(args[0])
-#     return wrapper
-
-# @is_authenticated_decorator
-# def create_blog_post(user):
-#     print(f"This is {user.name}'s new blog post.")
-
-# new_user = User("angela")
-# new_user.is_logged_in = True
-# create_blog_post(new_user)
+    app.run(host="0.0.0.0",port=int(3000) ,debug=True)
