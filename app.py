@@ -50,6 +50,7 @@ def api():
     else:
         return render_template("api.html")
     
+
     
 @app.route("/chapter9.html",methods = ["POST","GET"])
 def chapter9():
